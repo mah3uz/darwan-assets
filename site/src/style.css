@@ -82,3 +82,40 @@
     @apply block overflow-x-auto text-sm;
   }
 }
+
+@utility stack {
+  display: grid;
+  & > * {
+    grid-area: 1 / 1;
+    min-width: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The hero's one entrance: each piece rises in after the one before (--step). */
+@utility rise {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--step, 0) * 90ms + 100ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

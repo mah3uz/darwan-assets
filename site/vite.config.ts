@@ -6,8 +6,8 @@ import tailwindcss from "@tailwindcss/vite";
 import Markdown from "unplugin-vue-markdown/vite";
 import anchor from "markdown-it-anchor";
 
-const animations = resolve(__dirname, "../assets");
-const darwanDocs = resolve(__dirname, "../../darwan/docs");
+const animations = resolve(import.meta.dirname, "../assets");
+const darwanDocs = resolve(import.meta.dirname, "../../darwan/docs");
 
 // Links written for GitHub (README sections, sibling docs) point at the matching page here.
 const links: Record<string, string> = {
@@ -51,7 +51,7 @@ export default defineConfig({
     serveAnimations(),
   ],
   resolve: { alias: { "@darwan-docs": darwanDocs } },
-  server: { fs: { allow: [__dirname, darwanDocs] } },
+  server: { fs: { allow: [import.meta.dirname, darwanDocs] } },
   // "assets/" is taken by the animations.
   build: { assetsDir: "_app" },
 });

@@ -29,6 +29,7 @@ const columns = [0, 1, 2, 3].map((c) => themes.filter((_, i) => i % 4 === c));
 
 <style scoped>
 .wall {
+  animation: fade-in 1.6s ease-out both;
   perspective: 2200px;
   perspective-origin: 30% 50%;
   mask-image: linear-gradient(90deg, transparent 30%, #000 62%);

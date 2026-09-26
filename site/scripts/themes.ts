@@ -62,5 +62,12 @@ themes.sort((a, b) => order(a.family) - order(b.family) || a.name.localeCompare(
 
 writeFileSync(join(site, "src", "data", "themes.json"), JSON.stringify(themes, null, 2) + "\n");
 copyFileSync(join(darwan, "packaging", "arch", "darwan.svg"), join(site, "public", "darwan.svg"));
-copyFileSync(join(site, "..", "banner.png"), join(site, "public", "banner.png"));
+const icon = Bun.spawnSync([
+  "magick", "-background", "#13141f", "-density", "300", join(darwan, "packaging", "arch", "darwan.svg"),
+  "-flatten", "-resize", "180x180", join(site, "public", "apple-touch-icon.png"),
+]);
+if (icon.exitCode !== 0) {
+  console.error(`magick failed for the touch icon: ${icon.stderr}`);
+  process.exit(1);
+}
 console.log(`${themes.length} themes`);

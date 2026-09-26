@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import CopyCommand from "../components/CopyCommand.vue";
+import SegmentedControl from "../components/SegmentedControl.vue";
 import ThemeWall from "../components/ThemeWall.vue";
 import { themes } from "../data/themes";
+
+const featured = themes[Math.floor(Math.random() * themes.length)];
 
 const faces = [
   {
@@ -34,8 +37,8 @@ const installers = [
     label: "makepkg",
     commands: ["git clone https://aur.archlinux.org/darwan-bin.git", "cd darwan-bin", "makepkg -si"],
   },
-];
-const installer = ref("paru");
+] as const;
+const installer = ref<(typeof installers)[number]["id"]>("paru");
 
 const features = [
   { title: "One config file", text: "~/.config/darwan/config.toml holds everything, keeps your comments, and nothing inside a theme folder is ever edited." },
@@ -52,24 +55,24 @@ const features = [
     <ThemeWall />
     <div class="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
       <div class="max-w-xl">
-        <div class="flex items-center gap-5">
+        <div class="rise flex items-center gap-5">
           <img src="/darwan.svg" alt="" class="size-16 drop-shadow-[0_14px_30px_#2a63ec66] sm:size-20" />
           <h1 class="text-7xl leading-[0.9] font-bold tracking-[-0.04em] text-bright sm:text-8xl">Darwan</h1>
         </div>
-        <p class="mt-5 text-dim">
+        <p class="rise mt-5 text-dim" style="--step: 1">
           <span lang="bn" class="mr-1 font-bangla text-xl text-violet">দারোয়ান</span>
           is Bangla for gatekeeper.
         </p>
-        <p class="mt-8 text-3xl leading-tight font-medium tracking-tight text-ink sm:text-4xl">
+        <p class="rise mt-8 text-3xl leading-tight font-medium tracking-tight text-ink sm:text-4xl" style="--step: 2">
           Hand-crafted themes for<br />
           <span class="text-gate">both of your gates.</span>
         </p>
-        <p class="mt-6 max-w-md text-lg leading-relaxed text-dim">
+        <p class="rise mt-6 max-w-md text-lg leading-relaxed text-dim" style="--step: 3">
           Choose, configure, preview and apply {{ themes.length }} themes to your SDDM login screen and your Quickshell
           lockscreen, from one app on Arch Linux.
         </p>
-        <CopyCommand command="paru -S darwan-bin" class="mt-10 max-w-sm" />
-        <div class="mt-5 flex flex-wrap gap-3">
+        <CopyCommand command="paru -S darwan-bin" class="rise mt-10 max-w-sm" style="--step: 4" />
+        <div class="rise mt-5 flex flex-wrap gap-3" style="--step: 5">
           <RouterLink
             to="/themes"
             class="rounded-xl bg-bright px-5 py-3 font-medium text-night transition-colors hover:bg-white"
@@ -89,15 +92,23 @@ const features = [
 
   <section class="mx-auto mt-24 max-w-7xl px-4 sm:px-6">
     <div class="grid items-center gap-12 lg:grid-cols-[1.25fr_1fr]">
-      <figure class="overflow-hidden rounded-2xl bg-surface ring-1 ring-line">
-        <img
-          src="/assets/pixel-rainyroom.webp"
-          alt="The Rainy Room theme unlocking: the password is typed and the room fades away."
-          width="1920"
-          height="1080"
-          loading="lazy"
-          class="aspect-video w-full object-cover"
-        />
+      <figure>
+        <div class="overflow-hidden rounded-2xl bg-surface ring-1 ring-line">
+          <img
+            :src="featured.animation"
+            :alt="`${featured.name} unlocking: the password is typed and the theme plays its unlock animation.`"
+            width="1920"
+            height="1080"
+            loading="lazy"
+            class="aspect-video w-full bg-cover object-cover"
+            :style="{ backgroundImage: `url(${featured.still})` }"
+          />
+        </div>
+        <figcaption class="mt-3 text-sm text-dim">
+          <RouterLink :to="`/themes/${featured.id}`" class="hover:text-bright">
+            {{ featured.family ? `${featured.family} ${featured.name}` : featured.name }}
+          </RouterLink>
+        </figcaption>
       </figure>
       <div>
         <h2 class="text-4xl font-semibold tracking-tight text-bright">Two gates, one theme</h2>
@@ -140,45 +151,42 @@ const features = [
           The GUI, the TUI and the CLI share one core and one config file, so they always agree.
         </p>
       </div>
-      <div role="tablist" aria-label="Ways to use Darwan" class="flex self-start rounded-xl bg-surface p-1 ring-1 ring-line sm:self-auto">
-        <button
-          v-for="f in faces"
-          :key="f.id"
-          role="tab"
-          type="button"
-          :id="`face-${f.id}`"
-          :aria-selected="face === f.id"
-          :aria-controls="`panel-${f.id}`"
-          class="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
-          :class="face === f.id ? 'bg-raised text-bright' : 'text-dim hover:text-ink'"
-          @click="face = f.id"
-        >
-          {{ f.label }}
-        </button>
-      </div>
+      <SegmentedControl
+        v-model="face"
+        :options="faces.map((f) => ({ value: f.id, label: f.label }))"
+        label="Ways to use Darwan"
+        kind="tabs"
+        id="face"
+        class="self-start sm:self-auto"
+      />
     </div>
 
-    <div
-      v-for="f in faces"
-      v-show="face === f.id"
-      :key="f.id"
-      :id="`panel-${f.id}`"
-      role="tabpanel"
-      :aria-labelledby="`face-${f.id}`"
-      class="mt-8"
-    >
-      <div class="overflow-hidden rounded-2xl bg-surface ring-1 ring-line">
-        <img
-          v-if="f.id !== 'cli'"
-          :src="`/screens/${f.id}.webp`"
-          :alt="f.id === 'gui' ? 'The Darwan GUI: theme gallery, live preview and settings.' : 'The Darwan TUI in a terminal, with a theme preview.'"
-          loading="lazy"
-          class="w-full"
-        />
-        <pre
-          v-else
-          class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-ink"
-        ><span class="text-dim">$</span> <span class="text-bright">darwan list</span>
+    <!-- Panels share one grid cell, so the section keeps the tallest one's height and never jumps. -->
+    <div class="stack mt-8">
+      <div
+        v-for="f in faces"
+        :key="f.id"
+        :id="`face-${f.id}-panel`"
+        role="tabpanel"
+        :aria-labelledby="`face-${f.id}`"
+        :inert="face !== f.id"
+        class="flex flex-col transition duration-500 ease-[cubic-bezier(.2,.7,.2,1)]"
+        :class="face === f.id ? 'opacity-100' : 'pointer-events-none translate-y-2 scale-[.99] opacity-0'"
+      >
+        <div class="flex-1 overflow-hidden rounded-2xl bg-surface ring-1 ring-line">
+          <img
+            v-if="f.id !== 'cli'"
+            :src="`/screens/${f.id}.webp`"
+            :alt="f.id === 'gui' ? 'The Darwan GUI: theme gallery, live preview and settings.' : 'The Darwan TUI in a terminal, with a theme preview.'"
+            width="1910"
+            height="1070"
+            loading="lazy"
+            class="w-full"
+          />
+          <pre
+            v-else
+            class="h-full overflow-x-auto p-6 font-mono text-xs leading-relaxed text-ink sm:text-sm"
+          ><span class="text-dim">$</span> <span class="text-bright">darwan list</span>
 <span class="text-violet">L</span>  clockwork/neo-orbital    Clockwork · Neo-Orbital
    clockwork/orbital        Clockwork · Orbital
    genshin                  Genshin Impact  <span class="text-amber">(1 font missing)</span>
@@ -194,12 +202,23 @@ Lockscreen
 <span class="text-green">ok</span>    Wayland session wayland-1
 <span class="text-green">ok</span>    quickshell is installed
 <span class="text-green">ok</span>    Hyprland misc:allow_session_lock_restore is on
-…
+
+Themes
+<span class="text-green">ok</span>    41 themes in /usr/share/darwan/themes
+<span class="text-green">ok</span>    Qt multimedia backend is installed (video themes)
+<span class="text-amber">warn</span>  genshin: font HYWenHei-85W missing … <span class="text-dim">darwan font import genshin &lt;file&gt;</span>
+
+SDDM
+<span class="text-green">ok</span>    sddm-greeter-qt6 is installed
+<span class="text-green">ok</span>    darwan-helper and its polkit policy are installed
+<span class="text-green">ok</span>    SDDM uses darwan
+
 No problems that stop darwan from working.</pre>
-      </div>
-      <div class="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p class="max-w-2xl leading-relaxed text-dim">{{ f.text }}</p>
-        <RouterLink to="/docs/usage" class="shrink-0 text-blue underline-offset-4 hover:underline">How to use it</RouterLink>
+        </div>
+        <div class="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="max-w-2xl leading-relaxed text-dim">{{ f.text }}</p>
+          <RouterLink to="/docs/usage" class="shrink-0 text-blue underline-offset-4 hover:underline">How to use it</RouterLink>
+        </div>
       </div>
     </div>
   </section>
@@ -221,22 +240,28 @@ No problems that stop darwan from working.</pre>
         </RouterLink>
       </div>
       <div>
-        <div role="tablist" aria-label="Install with" class="flex gap-1">
-          <button
+        <SegmentedControl
+          v-model="installer"
+          :options="installers.map((i) => ({ value: i.id, label: i.label }))"
+          label="Install with"
+          kind="tabs"
+          id="install"
+          mono
+          class="w-fit"
+        />
+        <div class="stack mt-4">
+          <div
             v-for="i in installers"
             :key="i.id"
-            role="tab"
-            type="button"
-            :aria-selected="installer === i.id"
-            class="rounded-lg px-3 py-1.5 font-mono text-sm transition-colors"
-            :class="installer === i.id ? 'bg-raised text-bright' : 'text-dim hover:text-ink'"
-            @click="installer = i.id"
+            :id="`install-${i.id}-panel`"
+            role="tabpanel"
+            :aria-labelledby="`install-${i.id}`"
+            :inert="installer !== i.id"
+            class="space-y-2 self-start transition duration-300"
+            :class="installer === i.id ? 'opacity-100' : 'pointer-events-none opacity-0'"
           >
-            {{ i.label }}
-          </button>
-        </div>
-        <div v-for="i in installers" v-show="installer === i.id" :key="i.id" role="tabpanel" class="mt-4 space-y-2">
-          <CopyCommand v-for="c in i.commands" :key="c" :command="c" />
+            <CopyCommand v-for="c in i.commands" :key="c" :command="c" />
+          </div>
         </div>
         <p class="mt-8 text-dim">Then check your system, and try a theme without locking anything:</p>
         <div class="mt-3 space-y-2">

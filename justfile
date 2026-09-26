@@ -21,3 +21,10 @@ preview: build
 # Build and publish darwan.dev (run `bunx wrangler login` in site/ once first)
 deploy: build
     cd {{site}} && bunx wrangler deploy
+
+# Render site/public/og.png, the social preview image, from tools/banner.html
+og:
+    google-chrome-stable --headless=new --hide-scrollbars --allow-file-access-from-files \
+      --force-device-scale-factor=1 --window-size=1200,630 --virtual-time-budget=8000 \
+      --screenshot={{site}}/public/og.png "file://{{justfile_directory()}}/tools/banner.html?og"
+    pngquant --quality 80-95 --speed 1 --force --ext .png {{site}}/public/og.png

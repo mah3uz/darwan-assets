@@ -5,7 +5,7 @@
   "scripts": {
     "themes": "bun scripts/themes.ts",
     "dev": "bun scripts/themes.ts && vite",
-    "build": "bun scripts/themes.ts && vite build && bun scripts/media.ts",
+    "build": "bun scripts/themes.ts && vite build && bun scripts/media.ts && bun scripts/sitemap.ts",
     "preview": "wrangler dev",
     "deploy": "bun run build && wrangler deploy"
   },

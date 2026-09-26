@@ -119,3 +119,18 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
     </nav>
   </dialog>
 </template>
+
+<style scoped>
+dialog[open] {
+  animation: open 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+dialog[open]::backdrop {
+  animation: fade-in 0.35s ease-out;
+}
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+</style>

@@ -2,6 +2,10 @@
 <html>
 <head>
 <meta charset="utf-8">
+<script>
+  // banner.html?og lays the same design out as a 1200×630 social preview image.
+  if (new URLSearchParams(location.search).has("og")) document.documentElement.classList.add("og");
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Hind+Siliguri:wght@500&display=block" rel="stylesheet">
 <style>
@@ -56,6 +60,16 @@
   .tag { margin-top: 30px; font: 500 30px/1.25 "Space Grotesk", sans-serif; color: var(--ink); letter-spacing: -.3px; }
   .tag em { font-style: normal; background: linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip: text; color: transparent; }
   .chips { margin-top: 34px; display: flex; gap: 10px; }
+  .url { display: none; }
+
+  .og, .og body { width: 1200px; height: 630px; }
+  .og .card { width: 1200px; height: 630px; border-radius: 0; }
+  .og .wall { left: 540px; top: -110px; }
+  .og .copy { left: 72px; }
+  .og .url {
+    display: block; position: absolute; left: 72px; bottom: 40px;
+    font: 500 20px/1 "JetBrains Mono", monospace; color: var(--dim); letter-spacing: .5px;
+  }
   .chip {
     font: 600 14px/1 "JetBrains Mono", monospace; letter-spacing: 1.5px; text-transform: uppercase;
     padding: 10px 14px; border-radius: 999px; color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
@@ -82,6 +96,7 @@
       <span class="chip" style="--c: var(--green)">41 themes</span>
     </div>
   </div>
+  <div class="url">darwan.dev</div>
 </div>
 <script>
   const names = [

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
+import SegmentedControl from "../components/SegmentedControl.vue";
 import ThemeCard from "../components/ThemeCard.vue";
 import ThemeDialog from "../components/ThemeDialog.vue";
 import { families, familyOf, themes, type Theme } from "../data/themes";
@@ -36,20 +37,12 @@ const count = (f: string) => themes.filter(filters[f]).length;
     </p>
 
     <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div role="radiogroup" aria-label="Show" class="flex flex-wrap gap-1 rounded-xl bg-surface p-1 ring-1 ring-line">
-        <button
-          v-for="f in Object.keys(filters)"
-          :key="f"
-          type="button"
-          role="radio"
-          :aria-checked="filter === f"
-          class="rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors"
-          :class="filter === f ? 'bg-raised text-bright' : 'text-dim hover:text-ink'"
-          @click="filter = f"
-        >
-          {{ f }} <span class="ml-1 tabular-nums text-dim">{{ count(f) }}</span>
-        </button>
-      </div>
+      <SegmentedControl
+        v-model="filter"
+        :options="Object.keys(filters).map((f) => ({ value: f, label: f, hint: count(f) }))"
+        label="Show"
+        kind="radios"
+      />
       <label class="relative block sm:w-72">
         <span class="sr-only">Search themes</span>
         <input
