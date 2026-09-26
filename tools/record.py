@@ -87,6 +87,7 @@ def main():
     themes = args.themes or all_themes()
     shutil.rmtree(SCRATCH, ignore_errors=True)
     SCRATCH.mkdir(parents=True)
+    (ASSETS / "assets").mkdir(exist_ok=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
         jobs = []
         for theme in themes:
@@ -95,7 +96,7 @@ def main():
             result = record(theme, SCRATCH / f"{slug}.log", clip)
             print(f"{theme}: {result}", flush=True)
             if clip.exists():
-                jobs.append((theme, pool.submit(encode, clip, ASSETS / f"{slug}.webp", args.quality)))
+                jobs.append((theme, pool.submit(encode, clip, ASSETS / "assets" / f"{slug}.webp", args.quality)))
         for theme, job in jobs:
             print(f"{theme}: {job.result() / 1e6:.1f} MB", flush=True)
     shutil.rmtree(SCRATCH, ignore_errors=True)
