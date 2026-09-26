@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Hind+Siliguri:wght@500&display=block" rel="stylesheet">
+<style>
+  :root {
+    --bg: #13141f;
+    --ink: #c0caf5;
+    --dim: #737aa2;
+    --blue: #7aa2f7;
+    --violet: #bb9af7;
+    --green: #9ece6a;
+    --amber: #e0af68;
+  }
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 560px; background: transparent; overflow: hidden; }
+  .card {
+    position: relative; width: 1280px; height: 560px; border-radius: 28px; overflow: hidden;
+    background:
+      radial-gradient(900px 500px at 8% 110%, #2a3a7a55, transparent 60%),
+      radial-gradient(700px 420px at 30% -20%, #6a4bb04a, transparent 60%),
+      var(--bg);
+  }
+
+  .wall-wrap {
+    position: absolute; inset: 0; perspective: 2200px; perspective-origin: 30% 50%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 66%);
+            mask-image: linear-gradient(90deg, transparent 38%, #000 66%);
+  }
+  .wall {
+    position: absolute; left: 600px; top: -150px;
+    display: grid; grid-template-columns: repeat(5, 230px); gap: 16px;
+    transform: rotateY(-20deg) rotateX(12deg) rotateZ(-8deg);
+    transform-origin: 0 50%;
+  }
+  .wall img {
+    width: 230px; height: 129px; object-fit: cover; border-radius: 12px; display: block;
+    box-shadow: 0 18px 40px #0009, 0 0 0 1px #ffffff14;
+  }
+  .wall .shift { transform: translateY(-50px); }
+  .shade {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(180deg, #13141f 0%, transparent 18%, transparent 78%, #13141fcc 100%),
+      linear-gradient(90deg, #13141f 40%, #13141f00 64%);
+  }
+
+  .copy { position: absolute; left: 76px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  .brand { display: flex; align-items: center; gap: 22px; }
+  .brand img { width: 92px; height: 92px; filter: drop-shadow(0 14px 30px #2a63ec66); }
+  .word { font: 700 104px/0.9 "Space Grotesk", sans-serif; letter-spacing: -4px; color: #eef1ff; }
+  .bn { margin-top: 20px; font: 500 22px/1 "JetBrains Mono", monospace; color: var(--dim); letter-spacing: .5px; }
+  .bn b { font: 500 26px/1 "Hind Siliguri", sans-serif; color: var(--violet); margin-right: 10px; }
+  .tag { margin-top: 30px; font: 500 30px/1.25 "Space Grotesk", sans-serif; color: var(--ink); letter-spacing: -.3px; }
+  .tag em { font-style: normal; background: linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip: text; color: transparent; }
+  .chips { margin-top: 34px; display: flex; gap: 10px; }
+  .chip {
+    font: 600 14px/1 "JetBrains Mono", monospace; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 10px 14px; border-radius: 999px; color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 35%, transparent);
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="wall-wrap">
+    <div class="wall" id="wall"></div>
+  </div>
+  <div class="shade"></div>
+  <div class="copy">
+    <div class="brand">
+      <img src="../../darwan/packaging/arch/darwan.svg" alt="">
+      <div class="word">Darwan</div>
+    </div>
+    <div class="bn"><b>দারোয়ান</b>· the gatekeeper</div>
+    <div class="tag">Hand-crafted themes for<br><em>both of your gates.</em></div>
+    <div class="chips">
+      <span class="chip" style="--c: var(--blue)">SDDM login</span>
+      <span class="chip" style="--c: var(--violet)">Quickshell lock</span>
+      <span class="chip" style="--c: var(--green)">41 themes</span>
+    </div>
+  </div>
+</div>
+<script>
+  const names = [
+    "pixel-sakura", "star-rail", "man-bicycle", "genshin",
+    "forest", "pixel-emerald", "ninesols", "reverse-1999-1",
+    "pixel-skyscrapers", "field", "osu", "pixel-cyberpunk",
+    "dog-samurai", "pixel-waterfall", "girl-coffee", "material-you-dark",
+    "enfield", "pixel-munchlax", "pixel-night-city", "wuwa",
+    "pixel-coffee", "last-of-us", "material-you", "winter",
+    "pixel-rainyroom", "nier-automata", "girl-pillow", "sword",
+  ];
+  const wall = document.getElementById("wall");
+  names.forEach((n, i) => {
+    const img = document.createElement("img");
+    img.src = `../../darwan/themes/${n}/preview.jpg`;
+    if (i % 5 % 2 === 1) img.className = "shift";
+    wall.appendChild(img);
+  });
+</script>
+</body>
+</html>

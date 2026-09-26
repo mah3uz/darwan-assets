@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./banner.png" alt="Darwan" width="100%" />
+</p>
+
 # darwan-assets
 
 Demo animations of every [darwan](https://github.com/mah3uz/darwan) theme, for darwan's README. They live here so that cloning or building darwan never downloads them.
@@ -80,6 +84,22 @@ hyprctl output remove darwan-test
 | `tools/demo.sh` | runs one theme's demo under Quickshell with darwan's runtime |
 | `tools/shell/demo_shell.qml` | the demo: loads the theme through darwan's `ThemeHost`, draws the cursor, clicks and types |
 | `tools/shell/ThemeHost.qml`, `FallbackPrompt.qml`, `contract` | links into `../darwan/runtime` (Quickshell only loads QML from its own folder) |
+
+## The banner
+
+`banner.png` is darwan's README banner, rendered from `tools/banner.html`. The page takes the icon and the theme stills from `../darwan`, and its fonts from Google Fonts.
+
+Needs: Google Chrome and `pngquant`.
+
+```sh
+google-chrome-stable --headless=new --hide-scrollbars --allow-file-access-from-files \
+  --default-background-color=00000000 --force-device-scale-factor=2 --window-size=1280,560 \
+  --virtual-time-budget=8000 --screenshot=banner.png "file://$PWD/tools/banner.html"
+pngquant --quality 80-95 --speed 1 --force --ext .png banner.png
+cp banner.png ../darwan/banner.png
+```
+
+The theme count and the stills on the wall are written into `tools/banner.html`; update them when themes are added or removed.
 
 ## Credits
 
