@@ -1,0 +1,84 @@
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource/hind-siliguri/bengali-500.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --font-bangla: "Hind Siliguri", sans-serif;
+
+  --color-night: #13141f;
+  --color-surface: #1a1b26;
+  --color-raised: #222436;
+  --color-line: #2a2e45;
+  --color-ink: #c0caf5;
+  --color-bright: #eef1ff;
+  --color-dim: #8189b3;
+  --color-blue: #7aa2f7;
+  --color-violet: #bb9af7;
+  --color-green: #9ece6a;
+  --color-amber: #e0af68;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-night font-sans text-ink antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue;
+  }
+  ::selection {
+    @apply bg-violet/30 text-bright;
+  }
+}
+
+@utility text-gate {
+  background: linear-gradient(90deg, var(--color-blue), var(--color-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-bright);
+  --tw-prose-links: var(--color-blue);
+  --tw-prose-bold: var(--color-bright);
+  --tw-prose-code: var(--color-bright);
+  --tw-prose-pre-bg: var(--color-surface);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-th-borders: var(--color-line);
+  --tw-prose-td-borders: var(--color-line);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-bullets: var(--color-dim);
+  --tw-prose-counters: var(--color-dim);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-violet);
+  max-width: 72ch;
+
+  & :where(code):not(:where(pre *)) {
+    @apply rounded-md bg-raised px-1.5 py-0.5 font-normal;
+  }
+  & :where(code):not(:where(pre *))::before,
+  & :where(code):not(:where(pre *))::after {
+    content: none;
+  }
+  & pre {
+    @apply rounded-xl border border-line;
+  }
+  & h2 {
+    @apply tracking-tight;
+  }
+  & a {
+    @apply underline-offset-4;
+  }
+  & table {
+    @apply block overflow-x-auto text-sm;
+  }
+}

@@ -4,7 +4,7 @@
 
 # darwan-assets
 
-Demo animations of every [darwan](https://github.com/mah3uz/darwan) theme, for darwan's README. They live here so that cloning or building darwan never downloads them.
+Demo animations of every [darwan](https://github.com/mah3uz/darwan) theme, for darwan's README, and the website [darwan.dev](https://darwan.dev) that shows them. They live here so that cloning or building darwan never downloads them.
 
 ## The animations
 
@@ -100,6 +100,23 @@ cp banner.png ../darwan/banner.png
 ```
 
 The theme count and the stills on the wall are written into `tools/banner.html`; update them when themes are added or removed.
+
+## The website
+
+[darwan.dev](https://darwan.dev) is a Vue app in `site/`, styled with Tailwind and served by Cloudflare as a Worker with static assets. It has a landing page, a gallery of every theme, the docs and the credits.
+
+Needs: [Bun](https://bun.sh), [just](https://github.com/casey/just), ImageMagick, and a darwan checkout next to this repository (`../darwan`).
+
+```sh
+just dev       # hot-reloading dev server
+just build     # site/dist, with the animations copied into dist/assets
+just preview   # the build, served by Cloudflare's local runtime
+just deploy    # build and publish to darwan.dev
+```
+
+Run `bunx wrangler login` in `site/` once before the first deploy.
+
+The build reads the themes from `../darwan/themes`: each theme's name, family, author, options and fonts come from its `darwan.toml`, and its still from `preview.jpg` (shrunk to 640 px WebP). The lock-recovery and theme-contract docs are read from `../darwan/docs`. The rest of the docs are in `site/src/docs/`, adapted from darwan's README. The wallpaper credits are in `site/src/data/credits.ts`, copied from darwan's acknowledgements. The GUI and TUI screenshots in `site/public/screens/` were taken by hand.
 
 ## Credits
 
