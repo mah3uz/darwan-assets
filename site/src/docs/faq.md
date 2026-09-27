@@ -2,7 +2,7 @@
 
 ## A theme broke and I'm stuck on the lockscreen?
 
-Darwan shows its fallback password prompt when a theme fails to load. If the locker itself crashes, switch to a text console (`Ctrl+Alt+F3`), log in and run `darwan lock --replace`, then switch back and unlock. [Lock recovery](/docs/lock-recovery) covers every case. Afterwards, run `darwan check <theme>` and [open an issue](https://github.com/mah3uz/darwan/issues) with the output.
+Darwan shows its fallback password prompt when a theme fails to load, and if the lockscreen crashes it starts a new one by itself, which takes the lock back within a second or two. If the lockscreen hangs instead, switch to a text console (`Ctrl+Alt+F3`), log in and run `darwan lock --replace`, then switch back and unlock. [Lock recovery](/docs/lock-recovery) covers every case. Afterwards, run `darwan check <theme>` and [open an issue](https://github.com/mah3uz/darwan/issues) with the output.
 
 ## A virtual keyboard pops up on the login screen?
 
@@ -15,7 +15,11 @@ InputMethod=
 
 ## The background video looks low quality?
 
-Videos are compressed to keep the download small. For the full HD or 4K version, grab the original from the [credits](/credits), rename it to `bg.mp4` and replace the one in the theme's folder.
+Videos are compressed to keep the download small. For the full HD or 4K version, grab the original from the [credits](/credits) and make it the theme's background, without touching the theme's files:
+
+```sh
+darwan set pixel-coffee.background ~/Videos/coffee-4k.mp4
+```
 
 ## The lockscreen doesn't work on KDE Plasma?
 

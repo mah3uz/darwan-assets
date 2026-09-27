@@ -1,5 +1,5 @@
 import { parse } from "smol-toml";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { Glob } from "bun";
 
@@ -19,11 +19,36 @@ type Toml = {
   background?: string;
   font?: { family: string; license: string; url?: string }[];
   option?: { key: string; label: string; type: string; choices?: { value: string; label: string }[] }[];
-  supports?: Record<string, boolean>;
+  color?: { key: string; label: string }[];
+  supports?: {
+    clock_format?: boolean;
+    date_format?: boolean;
+    background?: boolean;
+    colors?: boolean;
+    fonts?: string[];
+    motion?: boolean;
+    variants?: string[];
+    default_variant?: string;
+  };
 };
 
+// Rebuilt from scratch, so a removed theme leaves no still behind.
 const stills = join(site, "public", "stills");
+rmSync(stills, { recursive: true, force: true });
 mkdirSync(stills, { recursive: true });
+const animations = join(site, "..", "assets");
+
+// A theme's other look: public/variants/<slug>-<variant>.webp (a still made with `darwan check --shots`),
+// and assets/<slug>-<variant>.webp when it also has an animation.
+function variantMedia(slug: string, variant: string) {
+  const still = `/variants/${slug}-${variant}.webp`;
+  const animation = `/assets/${slug}-${variant}.webp`;
+  return {
+    name: variant,
+    still: existsSync(join(site, "public", still)) ? still : null,
+    animation: existsSync(join(animations, `${slug}-${variant}.webp`)) ? animation : null,
+  };
+}
 
 const themes = [];
 for (const file of new Glob("**/darwan.toml").scanSync(themesDir)) {
@@ -52,6 +77,17 @@ for (const file of new Glob("**/darwan.toml").scanSync(themesDir)) {
     })),
     clock: t.supports?.clock_format ?? false,
     date: t.supports?.date_format ?? false,
+    customise: {
+      background: t.supports?.background ?? false,
+      colors: t.supports?.colors ?? false,
+      roles: (t.color ?? []).map((c) => c.label),
+      fonts: t.supports?.fonts ?? [],
+      motion: t.supports?.motion ?? false,
+    },
+    defaultVariant: t.supports?.default_variant ?? null,
+    variants: (t.supports?.variants ?? [])
+      .filter((v) => v !== t.supports?.default_variant)
+      .map((v) => variantMedia(slug, v)),
     still: `/stills/${slug}.webp`,
     animation: `/assets/${slug}.webp`,
   });

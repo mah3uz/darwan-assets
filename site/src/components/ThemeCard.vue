@@ -37,7 +37,10 @@ function stop() {
       <h2 class="font-medium text-bright">
         <span v-if="theme.family" class="text-dim">{{ theme.family }}&nbsp;</span>{{ theme.name }}
       </h2>
-      <span v-if="theme.fonts.length" class="shrink-0 text-xs text-amber" title="Uses a font you add yourself">needs a font</span>
+      <span class="flex shrink-0 gap-2 text-xs">
+        <span v-if="theme.defaultVariant" class="text-violet" title="Has a light and a dark look">light · dark</span>
+        <span v-if="theme.fonts.length" class="text-amber" title="Uses a font you add yourself">needs a font</span>
+      </span>
     </div>
   </RouterLink>
 </template>

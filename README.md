@@ -42,7 +42,7 @@ To show one in a README:
 | Honkai: Star Rail | `star-rail` | [`star-rail.webp`](./assets/star-rail.webp) | 2.9 MB |
 | Man · Bicycle | `man-bicycle` | [`man-bicycle.webp`](./assets/man-bicycle.webp) | 0.8 MB |
 | Material You | `material-you` | [`material-you.webp`](./assets/material-you.webp) | 0.3 MB |
-| Material You Dark | `material-you-dark` | [`material-you-dark.webp`](./assets/material-you-dark.webp) | 0.3 MB |
+| Material You, dark variant | `material-you` with `variant = "dark"` | [`material-you-dark.webp`](./assets/material-you-dark.webp) | 0.3 MB |
 | Minecraft | `minecraft` | [`minecraft.webp`](./assets/minecraft.webp) | 1.0 MB |
 | NieR: Automata | `nier-automata` | [`nier-automata.webp`](./assets/nier-automata.webp) | 1.2 MB |
 | Nine Sols | `ninesols` | [`ninesols.webp`](./assets/ninesols.webp) | 0.7 MB |

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import CopyCommand from "./CopyCommand.vue";
+import SegmentedControl from "./SegmentedControl.vue";
 import { wallpapers } from "../data/credits";
 import { themes, type Theme } from "../data/themes";
 
@@ -14,6 +15,24 @@ const prev = computed(() => themes[(index.value - 1 + themes.length) % themes.le
 const next = computed(() => themes[(index.value + 1) % themes.length]);
 const credit = computed(() => wallpapers[props.theme.id]);
 const background = { video: "Video", image: "Still image", color: "Plain colour" } as Record<string, string>;
+
+const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const look = ref(props.theme.defaultVariant ?? "");
+watch(() => props.theme.id, () => (look.value = props.theme.defaultVariant ?? ""));
+const looks = computed(() =>
+  props.theme.defaultVariant
+    ? [props.theme.defaultVariant, ...props.theme.variants.map((v) => v.name)].map((v) => ({ value: v, label: capital(v) }))
+    : [],
+);
+// The default look plays its unlock animation; another look shows its own animation, or a still of it.
+const media = computed(() => {
+  const v = props.theme.variants.find((v) => v.name === look.value);
+  return v ? { src: v.animation ?? v.still ?? props.theme.still, animated: v.animation !== null } : { src: props.theme.animation, animated: true };
+});
+const c = computed(() => props.theme.customise);
+const fonts = computed(() =>
+  c.value.fonts.includes("clock") ? "Text and clock" : c.value.fonts.includes("text") ? "Text" : null,
+);
 
 const close = () => router.push("/themes");
 
@@ -40,14 +59,19 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
   >
     <div class="relative">
       <img
-        :key="theme.id"
-        :src="theme.animation"
-        :alt="`${theme.name} unlocking: the password is typed and the theme plays its unlock animation.`"
+        :key="theme.id + look"
+        :src="media.src"
+        :alt="media.animated
+          ? `${theme.name} unlocking: the password is typed and the theme plays its unlock animation.`
+          : `${theme.name} in its ${look} look.`"
         width="1920"
         height="1080"
         class="aspect-video w-full bg-surface object-cover"
         :style="{ backgroundImage: `url(${theme.still})`, backgroundSize: 'cover' }"
       />
+      <div v-if="looks.length" class="absolute top-4 right-4 shadow-lg">
+        <SegmentedControl v-model="look" :options="looks" label="Look" kind="radios" />
+      </div>
     </div>
 
     <div class="grid gap-10 p-6 sm:p-8 lg:grid-cols-[1fr_22rem]">
@@ -77,6 +101,21 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
         <p class="mt-3 text-sm text-dim">
           Preview it without locking, use it for your lockscreen, or put it on your login screen.
         </p>
+
+        <h3 class="mt-10 text-lg font-medium text-bright">Make it yours</h3>
+        <div class="mt-3 space-y-2">
+          <CopyCommand v-if="c.background" :command="`darwan set ${theme.id}.background desktop`" />
+          <CopyCommand v-if="c.colors" :command="`darwan set ${theme.id}.accent generate`" />
+          <CopyCommand v-if="theme.defaultVariant" :command="`darwan set ${theme.id}.variant auto`" />
+          <CopyCommand :command="`darwan set ${theme.id}.motion_speed 1.5`" />
+        </div>
+        <p class="mt-3 text-sm text-dim">
+          <template v-if="c.background">Use your desktop wallpaper as the background, </template>
+          <template v-if="c.colors">take the accent colour from it, </template>
+          <template v-if="theme.defaultVariant">follow your desktop's light or dark mode, </template>
+          or speed up the animations. The GUI shows each change live before you save it.
+          <RouterLink to="/docs/customise" class="text-blue underline-offset-4 hover:underline">Everything you can change</RouterLink>
+        </p>
       </div>
 
       <dl class="space-y-5 text-sm">
@@ -92,6 +131,21 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
           <dt class="text-dim">Your clock and date settings</dt>
           <dd class="mt-1 text-bright">
             {{ theme.clock && theme.date ? "Both apply" : theme.clock ? "The clock applies; it shows no date" : "It shows no clock or date" }}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-dim">You can change</dt>
+          <dd class="mt-1 text-bright">
+            {{ c.background ? "Background: your image, GIF, video, colour or desktop wallpaper" : "Background: its own, part of the design" }}
+          </dd>
+          <dd class="mt-1 text-bright">
+            <template v-if="c.colors">Colours: accent, text{{ c.roles.length ? ", " + c.roles.join(", ").toLowerCase() : "" }}; typed, or generated from the background</template>
+            <template v-else>Colours: its own, part of the design</template>
+          </dd>
+          <dd v-if="fonts" class="mt-1 text-bright">Fonts: {{ fonts.toLowerCase() }}</dd>
+          <dd v-if="c.motion" class="mt-1 text-bright">Motion: speed, curve, reduce motion</dd>
+          <dd v-if="theme.defaultVariant" class="mt-1 text-bright">
+            Look: {{ looks.map((l) => l.label).join(" or ") }}, or following your desktop
           </dd>
         </div>
         <div v-if="theme.options.length">

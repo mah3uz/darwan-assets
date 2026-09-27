@@ -12,7 +12,7 @@ const faces = [
     id: "gui",
     label: "GUI",
     command: "darwan-gui",
-    text: "A gallery on the left, a live preview in the middle that reloads as you change settings, and the theme's settings on the right.",
+    text: "A gallery on the left, a live preview in the middle that shows every change before you save it, and the theme's settings and customisations on the right. Drop an image or a video on the preview to make it the background.",
   },
   {
     id: "tui",
@@ -24,7 +24,7 @@ const faces = [
     id: "cli",
     label: "CLI",
     command: "darwan --help",
-    text: "Every action as a command, with tab completion for theme ids, setting keys and their values.",
+    text: "Every action as a command, in colour on your terminal, with tab completion for theme ids, every setting a theme supports, and their values.",
   },
 ] as const;
 const face = ref<(typeof faces)[number]["id"]>("gui");
@@ -41,10 +41,13 @@ const installers = [
 const installer = ref<(typeof installers)[number]["id"]>("paru");
 
 const features = [
+  { title: "Make it yours", text: "Your own image, GIF, video or desktop wallpaper behind a theme, colours typed or generated from it the way Material You does, your fonts, and your animation speed." },
+  { title: "Light and dark", text: "Seven themes have a second look designed for them, not filtered from them, and can follow your desktop's light or dark mode." },
+  { title: "Your wallpaper, found for you", text: "Set the background to desktop and Darwan finds what draws your wallpaper: DankMaterialShell, Omarchy, hyprpaper, swww, swaybg and more." },
   { title: "One config file", text: "~/.config/darwan/config.toml holds everything, keeps your comments, and nothing inside a theme folder is ever edited." },
   { title: "Options that know the theme", text: "Each theme declares what it supports. Options it can't use are shown disabled with the reason." },
-  { title: "Try without locking", text: "A live preview, a full-screen preview with a mock password, SDDM's own test mode, and headless checks that type the password for you." },
-  { title: "Never locked out", text: "If a theme fails to load, you get a plain password prompt instead of a black screen." },
+  { title: "Try without locking", text: "A live preview that shows each change before you save it, a full-screen preview with a mock password, SDDM's own test mode, and headless checks that type the password for you." },
+  { title: "Never locked out", text: "If a theme fails to load, you get a plain password prompt. If the lockscreen crashes, a new one takes the lock back within a second or two, and your desktop never shows." },
   { title: "Your clock, everywhere", text: "12- or 24-hour time, AM/PM and a date format apply to every theme that shows them." },
   { title: "Root only where it must be", text: "A small helper writes SDDM's files through polkit and checks every value again. Nothing else runs as root." },
 ];
@@ -68,14 +71,14 @@ const features = [
           <span class="text-gate">both of your gates.</span>
         </p>
         <p class="rise mt-6 max-w-md text-lg leading-relaxed text-dim" style="--step: 3">
-          Choose, configure, preview and apply {{ themes.length }} themes to your SDDM login screen and your Quickshell
+          Choose, customise, preview and apply {{ themes.length }} themes to your SDDM login screen and your Quickshell
           lockscreen, from one app on Arch Linux.
         </p>
         <CopyCommand command="paru -S darwan-bin" class="rise mt-10 max-w-sm" style="--step: 4" />
         <div class="rise mt-5 flex flex-wrap gap-3" style="--step: 5">
           <RouterLink
             to="/themes"
-            class="rounded-xl bg-bright px-5 py-3 font-medium text-night transition-colors hover:bg-white"
+            class="rounded-xl bg-bright px-5 py-3 font-medium text-night transition-colors hover:bg-white light:hover:bg-ink"
           >
             Browse the themes
           </RouterLink>
@@ -130,7 +133,7 @@ const features = [
         </dl>
         <p class="mt-8 leading-relaxed text-dim">
           Use one theme for both, or a different one for each. Your settings reach both screens, because they come from
-          the same file.
+          the same file, and your own background and fonts go with them.
         </p>
       </div>
     </div>
@@ -187,33 +190,33 @@ const features = [
             v-else
             class="h-full overflow-x-auto p-6 font-mono text-xs leading-relaxed text-ink sm:text-sm"
           ><span class="text-dim">$</span> <span class="text-bright">darwan list</span>
-<span class="text-violet">L</span>  clockwork/neo-orbital    Clockwork · Neo-Orbital
-   clockwork/orbital        Clockwork · Orbital
-   genshin                  Genshin Impact  <span class="text-amber">(1 font missing)</span>
-   pixel-coffee             Pixel · Coffee
- <span class="text-blue">S</span> pixel-emerald            Pixel · Emerald
-   pixel-rainyroom          Pixel · Rainy Room
-   <span class="text-dim">…</span>
-<span class="text-dim">L = lock theme, S = SDDM theme</span>
+<span class="font-bold text-violet">Clockwork</span> <span class="text-dim">· 3</span>
+     <span class="text-blue">clockwork/neo-orbital</span>  Neo-Orbital     <span class="text-violet">light · dark</span>
+     <span class="text-blue">clockwork/orbital</span>      Orbital         <span class="text-violet">light · dark</span>
+<span class="font-bold text-violet">Pixel</span> <span class="text-dim">· 11</span>
+   <span class="font-bold text-blue">S</span> <span class="text-blue">pixel-emerald</span>          Emerald
+  <span class="font-bold text-violet">L</span>  <span class="text-blue">pixel-rainyroom</span>        Rainy Room
+<span class="font-bold text-violet">Other</span> <span class="text-dim">· 26</span>
+     <span class="text-blue">genshin</span>                Genshin Impact  <span class="font-bold text-amber">1 font missing</span>
+     <span class="text-blue">nothing</span>                Nothing         <span class="text-violet">light · dark</span>
+     <span class="text-dim">…</span>
 
-<span class="text-dim">$</span> <span class="text-bright">darwan set lock.theme pixel-rainyroom</span>
+<span class="text-dim">$</span> <span class="text-bright">darwan set pixel-rainyroom.background desktop</span>
+<span class="text-blue">pixel-rainyroom.background</span> = <span class="text-green">desktop</span>
 <span class="text-dim">$</span> <span class="text-bright">darwan doctor</span>
-Lockscreen
-<span class="text-green">ok</span>    Wayland session wayland-1
-<span class="text-green">ok</span>    quickshell is installed
-<span class="text-green">ok</span>    Hyprland misc:allow_session_lock_restore is on
+<span class="font-bold text-violet">Lockscreen</span>
+<span class="font-bold text-green">ok   </span> Wayland session wayland-1
+<span class="font-bold text-green">ok   </span> Hyprland misc:allow_session_lock_restore is on
+<span class="font-bold text-green">ok   </span> desktop wallpaper: ~/Pictures/Wallpapers/horizons.png (DMS)
 
-Themes
-<span class="text-green">ok</span>    41 themes in /usr/share/darwan/themes
-<span class="text-green">ok</span>    Qt multimedia backend is installed (video themes)
-<span class="text-amber">warn</span>  genshin: font HYWenHei-85W missing … <span class="text-dim">darwan font import genshin &lt;file&gt;</span>
+<span class="font-bold text-violet">Themes</span>
+<span class="font-bold text-green">ok   </span> 40 themes in /usr/share/darwan/themes
+<span class="font-bold text-amber">warn </span> genshin: font HYWenHei-85W missing … <span class="text-dim">darwan font import genshin &lt;file&gt;</span>
 
-SDDM
-<span class="text-green">ok</span>    sddm-greeter-qt6 is installed
-<span class="text-green">ok</span>    darwan-helper and its polkit policy are installed
-<span class="text-green">ok</span>    SDDM uses darwan
+<span class="font-bold text-violet">SDDM</span>
+<span class="font-bold text-green">ok   </span> SDDM uses darwan
 
-No problems that stop darwan from working.</pre>
+<span class="font-bold text-green">No problems that stop darwan from working.</span></pre>
         </div>
         <div class="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p class="max-w-2xl leading-relaxed text-dim">{{ f.text }}</p>

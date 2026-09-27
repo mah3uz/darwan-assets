@@ -4,9 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Darwan: themes for your login screen and lockscreen</title>
-    <meta name="description" content="Choose, configure, preview and apply 41 hand-crafted themes to your SDDM login screen and your Quickshell lockscreen, from one app on Arch Linux." />
-    <meta name="theme-color" content="#13141f" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Choose, customise, preview and apply 40 hand-crafted themes to your SDDM login screen and your Quickshell lockscreen, from one app on Arch Linux." />
+    <meta name="theme-color" content="#13141f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f6fb" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      // Before first paint, so a light-theme visitor never sees a dark flash; src/theme.ts takes over after.
+      try {
+        var c = localStorage.getItem("darwan-theme");
+        var light = c === "light" || (c !== "dark" && matchMedia("(prefers-color-scheme: light)").matches);
+        document.documentElement.dataset.theme = light ? "light" : "dark";
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
     <link rel="icon" href="/darwan.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
@@ -15,7 +26,7 @@
     <meta property="og:locale" content="en" />
     <meta property="og:url" content="https://darwan.dev/" />
     <meta property="og:title" content="Darwan: themes for your login screen and lockscreen" />
-    <meta property="og:description" content="Hand-crafted themes for both of your gates: the SDDM login screen and the Quickshell lockscreen. 41 themes, one app, on Arch Linux." />
+    <meta property="og:description" content="Hand-crafted themes for both of your gates: the SDDM login screen and the Quickshell lockscreen. 40 themes, one app, on Arch Linux." />
     <meta property="og:image" content="https://darwan.dev/og.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
@@ -23,7 +34,7 @@
     <meta property="og:image:alt" content="The Darwan icon and name beside a tilted wall of lockscreen themes." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Darwan: themes for your login screen and lockscreen" />
-    <meta name="twitter:description" content="Hand-crafted themes for both of your gates: the SDDM login screen and the Quickshell lockscreen. 41 themes, one app, on Arch Linux." />
+    <meta name="twitter:description" content="Hand-crafted themes for both of your gates: the SDDM login screen and the Quickshell lockscreen. 40 themes, one app, on Arch Linux." />
     <meta name="twitter:image" content="https://darwan.dev/og.png" />
     <meta name="twitter:image:alt" content="The Darwan icon and name beside a tilted wall of lockscreen themes." />
 
@@ -33,7 +44,7 @@
         "@type": "SoftwareApplication",
         "name": "Darwan",
         "alternateName": "দারোয়ান",
-        "description": "One app, with a CLI, a TUI and a GUI, for choosing, configuring, previewing and applying 41 hand-crafted themes to the SDDM login screen and the Quickshell lockscreen.",
+        "description": "One app, with a CLI, a TUI and a GUI, for choosing, configuring, previewing and applying 40 hand-crafted themes to the SDDM login screen and the Quickshell lockscreen.",
         "url": "https://darwan.dev/",
         "image": "https://darwan.dev/og.png",
         "applicationCategory": "UtilitiesApplication",
@@ -52,7 +63,7 @@
     <noscript>
       <h1>Darwan</h1>
       <p>
-        Choose, configure, preview and apply 41 hand-crafted themes to your SDDM login screen and your Quickshell
+        Choose, customise, preview and apply 40 hand-crafted themes to your SDDM login screen and your Quickshell
         lockscreen, from one app on Arch Linux. Install it from the AUR with <code>paru -S darwan-bin</code>.
       </p>
       <p><a href="https://github.com/mah3uz/darwan">Darwan on GitHub</a></p>

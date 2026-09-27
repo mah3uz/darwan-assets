@@ -46,7 +46,7 @@ Your AUR helper or `makepkg -s` installs these for you.
 | `/usr/bin/darwan-gui` | GUI, also in your app launcher as *Darwan* |
 | `/usr/lib/darwan/darwan-helper` | privileged SDDM helper, run through `pkexec` |
 | `/usr/share/darwan/runtime/` | the QML runtime shared by the lockscreen and the previews |
-| `/usr/share/darwan/themes/` | all 41 themes |
+| `/usr/share/darwan/themes/` | all 40 themes |
 | `/usr/share/polkit-1/actions/org.darwan.policy` | lets the helper ask for your password once per session |
 
 To build from the repository instead, see [Development](https://github.com/mah3uz/darwan/blob/main/docs/development.md).

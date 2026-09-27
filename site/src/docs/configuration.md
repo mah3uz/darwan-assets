@@ -17,8 +17,9 @@ show_ampm = false
 format = "ddd, MMM d"   # one of the presets below; unset, each theme keeps its own
 
 [themes."clockwork/orbital"]
-themeMode = "light"
-enableWindup = false
+variant = "light"       # a customisation, see below
+enableWindup = false    # one of Orbital's own options
+accent = "#7aa2f7"
 
 [themes.terraria]
 background_mode = "static"
@@ -27,7 +28,7 @@ background_index = "3"
 
 ## Global settings
 
-The clock settings reach the 39 themes that show a clock and the date setting the 38 that show a date: Nine Sols and Terraria show neither, and osu! has no date. Left unset, each theme keeps its own design.
+The clock settings reach the 38 themes that show a clock and the date setting the 37 that show a date: Nine Sols and Terraria show neither, and osu! has no date. Left unset, each theme keeps its own design.
 
 | `date.format` | Looks like |
 |:--|:--|
@@ -44,11 +45,15 @@ Each theme declares what it supports. Options a theme can't use are shown disabl
 
 | Theme | Option | Values |
 |:--|:--|:--|
-| Clockwork Orbital | `themeMode` | `dark` `light` |
 | Clockwork Orbital | `enableWindup` | `true` `false` |
-| Clockwork Tape | `themeMode` | `dark` `light` |
 | osu!, osu! mania | `gameMode` | `menu` (straight to password), `game` (rhythm-game gate) |
 | Genshin Impact | `background_mode`, `background_index` | `time` `random` `static`; `1`–`4` (day, night, dawn, dusk) |
 | Terraria | `background_mode`, `background_index` | `time` `random` `static`; `1`–`5` |
 
 `darwan show <theme>` always lists the current set.
+
+## Customisations
+
+Background, colours, fonts, the light or dark look and animation speed are settings with the same names in every
+theme, such as `background`, `accent`, `variant` and `motion_speed`, set in the same `[themes."<theme>"]` section.
+[Customise](/docs/customise) lists them all, with their values.

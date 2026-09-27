@@ -11,8 +11,11 @@ const filters: Record<string, (t: Theme) => boolean> = {
   All: () => true,
   ...Object.fromEntries(families.map((f) => [f, (t: Theme) => familyOf(t) === f])),
   Video: (t) => t.background === "video",
+  "Light & dark": (t) => t.defaultVariant !== null,
 };
-const filter = ref("All");
+// ?filter=… opens the gallery on one filter, so docs can link to e.g. the themes with a light and a dark look.
+const fromQuery = String(route.query.filter ?? "");
+const filter = ref(fromQuery in filters ? fromQuery : "All");
 const query = ref("");
 
 const shown = computed(() => {
@@ -32,8 +35,9 @@ const count = (f: string) => themes.filter(filters[f]).length;
   <div class="mx-auto max-w-7xl px-4 pt-12 sm:px-6">
     <h1 class="text-5xl font-semibold tracking-tight text-bright">Themes</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-dim">
-      Every theme works on both the lockscreen and the login screen. Point at one to watch it unlock, or open it for its
-      settings and the commands to use it.
+      Every theme works on both the lockscreen and the login screen, and takes your own background, colours, fonts and
+      animation speed where its design allows. Point at one to watch it unlock, or open it for its settings and the
+      commands to use it.
     </p>
 
     <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

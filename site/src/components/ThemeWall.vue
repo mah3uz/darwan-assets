@@ -18,7 +18,7 @@ const columns = [0, 1, 2, 3].map((c) => themes.filter((_, i) => i % 4 === c));
             height="720"
             loading="eager"
             decoding="async"
-            class="aspect-video w-full rounded-xl object-cover shadow-[0_18px_40px_#0009] ring-1 ring-white/10"
+            class="aspect-video w-full rounded-xl object-cover shadow-[0_18px_40px_#0009] ring-1 ring-white/10 light:shadow-[0_18px_40px_#1a1b2633] light:ring-black/10"
           />
         </div>
       </div>

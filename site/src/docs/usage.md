@@ -18,7 +18,7 @@ Darwan is one app with three faces. `darwan` with a command is the CLI, `darwan`
 | `darwan doctor` | check the session, Quickshell, fonts, the helper and SDDM's config |
 | `darwan completion bash\|zsh\|fish` | print the tab-completion script for your shell |
 
-Setting keys are `lock.theme`, `sddm.theme`, `clock.format`, `clock.show_ampm`, `date.format` and `<theme>.<option>`.
+Setting keys are `lock.theme`, `sddm.theme`, `clock.format`, `clock.show_ampm`, `date.format`, `<theme>.<option>` for a theme's own options, and `<theme>.<setting>` for [customisations](/docs/customise) such as `pixel-coffee.background` or `nothing.variant`.
 
 Tab completion offers theme ids, setting keys and each key's values. Load it when your shell starts, so it stays in step with the installed version:
 
@@ -43,7 +43,7 @@ Run `darwan` in a terminal. Themes are grouped into Clockwork, Pixel and Other t
 
 ## GUI
 
-Run `darwan-gui`, or open *Darwan* from your launcher. On the left is the theme gallery with search; in the centre, a live preview that reloads as you change settings (click it and type `test` to unlock); on the right, the theme's settings, saved as you change them.
+Run `darwan-gui`, or open *Darwan* from your launcher. On the left is the theme gallery with search; in the centre, a live preview that shows every change at once (click it and type `test` to unlock); on the right, the theme's settings and [customisations](/docs/customise). Changes stay unsaved until you press *Save* (`Ctrl+S`); *Discard* goes back. With unsaved changes, switching themes, closing the window (including your compositor's close keybind) or running a command asks you to save or discard first. Drop an image or video on the preview to use it as the background.
 
 Below the preview: *Use for lock*, *Lock now*, *Full-screen preview*, *Apply to SDDM*, *SDDM test mode* and *Check*, plus *Import…* for missing fonts. *Doctor* is at the top right. The *Lockscreen* / *Login screen layout* switch shows the theme as each host would.
 
@@ -65,4 +65,16 @@ misc {
 bind = SUPER, L, exec, darwan lock
 ```
 
-For hypridle, set `lock_cmd = darwan lock`. Pressing the keybind while already locked does nothing, because only one lockscreen runs at a time, and `darwan lock` refuses to lock while `allow_session_lock_restore` is off.
+For hypridle, lock with Darwan and let sleep wait until the lock is up:
+
+```ini
+general {
+    lock_cmd = darwan lock
+    before_sleep_cmd = loginctl lock-session
+    inhibit_sleep = 3
+}
+```
+
+`inhibit_sleep = 3` matters: hypridle's default waits for the lock only when the command is hyprlock, so without it the machine can go to sleep before Darwan's lock is on screen. `darwan doctor` checks this.
+
+Pressing the keybind while already locked does nothing, because only one lockscreen runs at a time, and `darwan lock` refuses to lock while `allow_session_lock_restore` is off. If the lockscreen crashes, for example when a monitor drops out during sleep, Darwan starts a new one by itself within a second or two and it takes the lock back; your desktop never shows.

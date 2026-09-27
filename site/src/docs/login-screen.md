@@ -13,12 +13,13 @@ Without a theme id, `preview` and `apply` use the `[sddm]` theme from your confi
 
 ## What it writes
 
-The SDDM greeter runs as its own user and can't read your home folder, so `apply` writes system files through `darwan-helper`, launched through polkit. The helper checks every value again before writing, nothing else runs as root, and it only ever touches these files:
+The SDDM greeter runs as its own user and can't read your home folder, so `apply` writes system files through `darwan-helper`, launched through polkit. A [customised](/docs/customise) background or font is sent along with your settings: the helper checks each file's type and size, and stores its own copy, so SDDM never reads your home folder. Changed your wallpaper or a customisation? Run `apply` again. The helper checks every value again before writing, nothing else runs as root, and it only ever touches these files:
 
 | File | Purpose |
 |:--|:--|
 | `/usr/share/sddm/themes/darwan` | points at the chosen theme |
 | `/usr/share/darwan/themes/<theme>/theme.conf.user` | your options, in SDDM's own override format |
+| `/var/lib/darwan/sddm/media/` | copies of your background and font files |
 | `/etc/sddm.conf.d/zz-darwan.conf` | `[Theme] Current=darwan` |
 | `/usr/share/darwan/themes/<theme>/font/<file>` | fonts you import |
 

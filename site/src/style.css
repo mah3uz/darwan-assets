@@ -22,6 +22,24 @@
   --color-amber: #e0af68;
 }
 
+/* data-theme is set before first paint (index.html), from the visitor's choice or their system's. */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-night: #f5f6fb;
+  --color-surface: #ffffff;
+  --color-raised: #eceef7;
+  --color-line: #d8dcec;
+  --color-ink: #3b4261;
+  --color-bright: #11131f;
+  --color-dim: #62698f;
+  --color-blue: #2e59c8;
+  --color-violet: #7847bd;
+  --color-green: #4e7a17;
+  --color-amber: #99600f;
+}
+
 @layer base {
   html {
     color-scheme: dark;

@@ -1,6 +1,6 @@
 # Quick start
 
-From a fresh install to both screens themed, in six steps. `pixel-coffee` is just an example; `darwan list` shows every theme's id, and so does the [theme gallery](/themes).
+From a fresh install to both screens themed, in seven steps. `pixel-coffee` is just an example; `darwan list` shows every theme's id, and so does the [theme gallery](/themes).
 
 ## 1. Check your system
 
@@ -66,6 +66,17 @@ Log out to see it. To go back to your previous login screen:
 darwan sddm reset
 ```
 
-## 6. Add missing fonts (optional)
+## 6. Make it yours (optional)
+
+Use your desktop wallpaper as the background and take the accent colour from it:
+
+```sh
+darwan set pixel-coffee.background desktop
+darwan set pixel-coffee.accent generate
+```
+
+Or open the GUI and try things in the live preview before you save. [Customise](/docs/customise) lists everything you can change. Run `darwan sddm apply` again to bring your changes to the login screen.
+
+## 7. Add missing fonts (optional)
 
 Eight themes use commercial fonts that can't be shipped; see [Fonts](/docs/fonts).

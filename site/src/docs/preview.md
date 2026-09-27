@@ -4,10 +4,10 @@ You never have to lock your real session to try a theme.
 
 | Mode | How | Password | Good for |
 |:--|:--|:--|:--|
-| **Live preview** | GUI centre pane | `test` | tweaking settings and seeing the change at once |
+| **Live preview** | GUI centre pane | `test` | tweaking settings and customisations, and seeing each change before you save it |
 | **Full-screen preview** | `darwan preview <theme>` | `test`, or your real one with `--pam` | the exact lockscreen runtime, without locking; `Ctrl+Q` closes it |
 | **SDDM preview** | `darwan sddm preview <theme>` | none (visual only) | how it looks in SDDM's own greeter before applying |
-| **Headless check** | `darwan check --all --shots ./shots` | typed for you | QML errors, missing fonts and a real unlock test across every theme |
+| **Headless check** | `darwan check --all --shots ./shots` | typed for you | QML errors, missing fonts and a real unlock test across every theme; add `--with-config` to test with your settings |
 
 ## Preview flags
 
