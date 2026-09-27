@@ -5,6 +5,7 @@ import CopyCommand from "./CopyCommand.vue";
 import SegmentedControl from "./SegmentedControl.vue";
 import { wallpapers } from "../data/credits";
 import { themes, type Theme } from "../data/themes";
+import { track } from "../analytics";
 
 const props = defineProps<{ theme: Theme }>();
 const router = useRouter();
@@ -70,7 +71,13 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
         :style="{ backgroundImage: `url(${theme.still})`, backgroundSize: 'cover' }"
       />
       <div v-if="looks.length" class="absolute top-4 right-4 shadow-lg">
-        <SegmentedControl v-model="look" :options="looks" label="Look" kind="radios" />
+        <SegmentedControl
+          v-model="look"
+          :options="looks"
+          label="Look"
+          kind="radios"
+          @update:model-value="(v: string) => track('Theme look', { theme: theme.id, look: v })"
+        />
       </div>
     </div>
 

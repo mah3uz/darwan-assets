@@ -4,6 +4,7 @@ import CopyCommand from "../components/CopyCommand.vue";
 import SegmentedControl from "../components/SegmentedControl.vue";
 import ThemeWall from "../components/ThemeWall.vue";
 import { themes } from "../data/themes";
+import { track } from "../analytics";
 
 const featured = themes[Math.floor(Math.random() * themes.length)];
 
@@ -247,6 +248,7 @@ const features = [
           v-model="installer"
           :options="installers.map((i) => ({ value: i.id, label: i.label }))"
           label="Install with"
+          @update:model-value="(v: string) => track('Install method', { method: v })"
           kind="tabs"
           id="install"
           mono

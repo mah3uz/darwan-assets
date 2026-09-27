@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { track } from "../analytics";
 
 const props = defineProps<{ command: string }>();
 const copied = ref(false);
@@ -7,6 +8,7 @@ let timer: number | undefined;
 
 async function copy() {
   await navigator.clipboard.writeText(props.command);
+  track("Copy command", { command: props.command });
   copied.value = true;
   clearTimeout(timer);
   timer = window.setTimeout(() => (copied.value = false), 1600);
