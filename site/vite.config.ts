@@ -5,6 +5,8 @@ import vue from "@vitejs/plugin-vue";
 import tailwindcss from "@tailwindcss/vite";
 import Markdown from "unplugin-vue-markdown/vite";
 import anchor from "markdown-it-anchor";
+import { fromHighlighter } from "@shikijs/markdown-exit/core";
+import { createHighlighter } from "shiki";
 
 const animations = resolve(import.meta.dirname, "../assets");
 const darwanDocs = resolve(import.meta.dirname, "../../darwan/docs");
@@ -15,6 +17,15 @@ const links: Record<string, string> = {
   "./lock-recovery.md": "/docs/lock-recovery",
   "./theme-contract.md": "/docs/theme-contract",
 };
+
+// Highlighted at build time, so the page ships coloured HTML and no highlighter. Every docs code block uses one of these.
+const highlighter = await createHighlighter({
+  themes: ["tokyo-night", "github-light"],
+  langs: ["sh", "toml", "ini", "qml", "lua"],
+});
+
+// Each code block gets a copy button; Docs.vue handles the click.
+const copyButton = `<button type="button" class="code-copy" aria-label="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 0 1 2-2h9" /></svg><span>Copy</span></button>`;
 
 // The animations stay in ../assets; the build copies them (scripts/media.ts), dev serves them from there.
 function serveAnimations(): Plugin {
@@ -38,6 +49,10 @@ export default defineConfig({
       wrapperClasses: "prose",
       markdownItSetup(md) {
         md.use(anchor);
+        // Both themes' colours are kept as CSS variables; style.css picks one to match the site's light or dark mode.
+        md.use(fromHighlighter(highlighter, { themes: { dark: "tokyo-night", light: "github-light" }, defaultColor: false }));
+        const fence = md.renderer.rules.fence!;
+        md.renderer.rules.fence = (...args) => `<div class="code-block">${fence(...args)}${copyButton}</div>`;
         const render = md.renderer.rules.link_open ?? ((t, i, o, _e, s) => s.renderToken(t, i, o));
         md.renderer.rules.link_open = (tokens, i, opts, env, self) => {
           const href = tokens[i].attrGet("href") ?? "";

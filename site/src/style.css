@@ -101,6 +101,65 @@
   }
 }
 
+/* Code blocks: Shiki keeps both themes' colours as variables (vite.config.ts); this picks the one for the mode. */
+.prose .shiki span {
+  color: var(--shiki-dark);
+}
+[data-theme="light"] .prose .shiki span {
+  color: var(--shiki-light);
+}
+.prose .code-block {
+  position: relative;
+  margin: 1.7em 0;
+}
+.prose .code-block pre {
+  margin: 0;
+}
+.code-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+  background: var(--color-raised);
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-dim);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    color 0.15s;
+  & svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  &:hover {
+    color: var(--color-bright);
+  }
+  &[data-copied] {
+    color: var(--color-green);
+  }
+}
+.code-block:hover .code-copy,
+.code-copy:focus-visible,
+.code-copy[data-copied] {
+  opacity: 1;
+}
+/* No hover on touch screens, so the button is always shown there. */
+@media (hover: none) {
+  .code-copy {
+    opacity: 1;
+  }
+}
+
 @utility stack {
   display: grid;
   & > * {

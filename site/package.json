@@ -18,10 +18,12 @@
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
+    "@shikijs/markdown-exit": "^4.4.3",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-vue": "^6.0.9",
     "markdown-it-anchor": "^10.0.0",
+    "shiki": "^4.4.3",
     "smol-toml": "^1.9.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",

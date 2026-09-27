@@ -2,12 +2,33 @@
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { docs } from "../docs";
+import { track } from "../analytics";
 
 const route = useRoute();
 const router = useRouter();
 
+// The copy buttons come with the Markdown's code blocks (vite.config.ts), so their clicks are handled here.
+async function copyCode(button: HTMLButtonElement) {
+  const code = button.closest(".code-block")?.querySelector("pre")?.textContent;
+  if (!code) return;
+  await navigator.clipboard.writeText(code.replace(/\n$/, ""));
+  track("Copy code", { page: route.path });
+  const label = button.querySelector("span");
+  button.dataset.copied = "";
+  if (label) label.textContent = "Copied";
+  window.setTimeout(() => {
+    delete button.dataset.copied;
+    if (label) label.textContent = "Copy";
+  }, 1600);
+}
+
 // Markdown renders plain <a> tags; keep internal links inside the app instead of reloading the page.
 function follow(e: MouseEvent) {
+  const copy = (e.target as HTMLElement).closest<HTMLButtonElement>(".code-copy");
+  if (copy) {
+    copyCode(copy);
+    return;
+  }
   const a = (e.target as HTMLElement).closest("a");
   if (!a || a.origin !== location.origin || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
   e.preventDefault();
