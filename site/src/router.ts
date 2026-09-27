@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { docs } from "./docs";
 import { themes } from "./data/themes";
+import Home from "./pages/Home.vue";
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", component: () => import("./pages/Home.vue") },
-    { path: "/themes/:id(.*)?", component: () => import("./pages/Themes.vue"), meta: { title: "Themes", description: "All 41 Darwan themes for the SDDM login screen and the Quickshell lockscreen: pixel worlds, game tributes and Clockwork. Watch each one unlock." } },
+    // Bundled with the app: most visitors land here, so it shouldn't wait on a second request.
+    { path: "/", component: Home },
+    { path: "/themes/:id(.*)?", component: () => import("./pages/Themes.vue"), meta: { title: "Themes", description: `All ${themes.length} Darwan themes for the SDDM login screen and the Quickshell lockscreen: pixel worlds, game tributes and Clockwork. Watch each one unlock.` } },
     {
       path: "/docs",
       component: () => import("./pages/Docs.vue"),
