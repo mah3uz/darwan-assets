@@ -42,7 +42,7 @@ const installers = [
 const installer = ref<(typeof installers)[number]["id"]>("paru");
 
 const features = [
-  { title: "Make it yours", text: "Your own image, GIF, video or desktop wallpaper behind a theme, colours typed or generated from it the way Material You does, your fonts, and your animation speed." },
+  { title: "Make it yours", text: "Your own image, GIF, video or desktop wallpaper behind a theme, colours picked or generated from it the way Material You does, your fonts, and your animation speed." },
   { title: "Light and dark", text: "Seven themes have a second look designed for them, not filtered from them, and can follow your desktop's light or dark mode." },
   { title: "Your wallpaper, found for you", text: "Set the background to desktop and Darwan finds what draws your wallpaper: DankMaterialShell, Omarchy, hyprpaper, swww, swaybg and more." },
   { title: "One config file", text: "~/.config/darwan/config.toml holds everything, keeps your comments, and nothing inside a theme folder is ever edited." },

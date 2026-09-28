@@ -9,16 +9,21 @@ does `darwan show <theme>`. Settings are per theme, so changing Rainy Room never
 The GUI is the easiest way. Change anything on the right and the live preview shows it at once; nothing is written
 until you press **Save** (`Ctrl+S`), and **Discard** goes back to what you had. Drop an image or a video on the preview
 to make it the background. If you switch themes, close the window or run a command with unsaved changes, the GUI asks
-first.
+first. **Reset theme** puts every setting of the theme back to its default, in the same unsaved way.
+
+A colour opens a picker with three choices: the theme's own, generated from the background, or a custom one from a
+colour wheel, a pasted code, or swatches of the colours your background gives. Each choice shows in the preview at once;
+**Cancel** or `Esc` puts back what you had.
 
 The TUI and the CLI change the same settings. In the TUI, open a theme's settings with `⏎`; the arrow keys switch a
 colour between the theme's own and generated, and a background between the theme's own and your desktop wallpaper, and
-`⏎` lets you type a value. From a shell:
+`⏎` lets you type a value; `R` twice resets the whole theme. From a shell:
 
 ```sh
 darwan set pixel-rainyroom.background desktop
 darwan set pixel-rainyroom.accent generate
 darwan unset pixel-rainyroom.accent     # back to the theme's own
+darwan unset pixel-rainyroom            # every setting of the theme
 ```
 
 All three write to `~/.config/darwan/config.toml`, under the theme's own section:
@@ -65,8 +70,9 @@ Genshin Impact, NieR: Automata and Terraria keep their own backgrounds, because 
 
 `generate` picks colours from an image the way Android's Material You does, with the same algorithm and scheme names as
 [matugen](https://github.com/InioX/matugen), so a desktop themed with matugen and your lockscreen match. **Material
-You** goes further: it uses a whole Material palette, so one accent colour recolours all of it, and `generate` builds the
-palette from the background.
+You** goes further: it uses a whole Material palette. `generate` builds that palette from the background, and a colour
+you pick replaces only its own part: a picked accent leads the accent colours while the background still gives the rest.
+With nothing generated, a picked accent builds the whole palette on its own.
 
 Genshin Impact, osu! and osu! mania keep their own colours, because each of their backgrounds comes with a matching
 colour scheme; Windows 7 keeps Aero's.

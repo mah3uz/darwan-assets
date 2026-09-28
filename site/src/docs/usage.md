@@ -10,6 +10,7 @@ Darwan is one app with three faces. `darwan` with a command is the CLI, `darwan`
 | `darwan list` | list the themes; `L` marks the lock theme, `S` the SDDM theme |
 | `darwan show <theme>` | a theme's details, fonts and settings |
 | `darwan get [key]`, `set <key> <value>`, `unset <key>` | read, change or reset a setting, e.g. `darwan set clock.format 12h` |
+| `darwan unset <theme>` | put every setting of one theme back to its default |
 | `darwan lock [theme]` | lock the screen now (default: the `[lock]` theme) |
 | `darwan preview [theme]` | full-screen preview, no real lock ([details](/docs/preview)) |
 | `darwan check <theme>… \| --all` | headless test: QML errors, missing fonts, and whether typing the password unlocks |
@@ -43,7 +44,7 @@ Run `darwan` in a terminal. Themes are grouped into Clockwork, Pixel and Other t
 
 ## GUI
 
-Run `darwan-gui`, or open *Darwan* from your launcher. On the left is the theme gallery with search; in the centre, a live preview that shows every change at once (click it and type `test` to unlock); on the right, the theme's settings and [customisations](/docs/customise). Changes stay unsaved until you press *Save* (`Ctrl+S`); *Discard* goes back. With unsaved changes, switching themes, closing the window (including your compositor's close keybind) or running a command asks you to save or discard first. Drop an image or video on the preview to use it as the background.
+Run `darwan-gui`, or open *Darwan* from your launcher. On the left is the theme gallery with search; in the centre, a live preview that shows every change at once (click it and type `test` to unlock); on the right, the theme's settings and [customisations](/docs/customise). Changes stay unsaved until you press *Save* (`Ctrl+S`); *Discard* goes back. With unsaved changes, switching themes, closing the window (including your compositor's close keybind) or running a command asks you to save or discard first. Drop an image or video on the preview to use it as the background. A colour opens a picker: the theme's own, generated from the background, or your own from a colour wheel, a pasted code or swatches. *Reset theme* puts every setting of the theme back to its default, unsaved until you press *Save*.
 
 Below the preview: *Use for lock*, *Lock now*, *Full-screen preview*, *Apply to SDDM*, *SDDM test mode* and *Check*, plus *Import…* for missing fonts. *Doctor* is at the top right. The *Lockscreen* / *Login screen layout* switch shows the theme as each host would.
 

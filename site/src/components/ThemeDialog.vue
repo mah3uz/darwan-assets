@@ -146,7 +146,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
             {{ c.background ? "Background: your image, GIF, video, colour or desktop wallpaper" : "Background: its own, part of the design" }}
           </dd>
           <dd class="mt-1 text-bright">
-            <template v-if="c.colors">Colours: accent, text{{ c.roles.length ? ", " + c.roles.join(", ").toLowerCase() : "" }}; typed, or generated from the background</template>
+            <template v-if="c.colors">Colours: accent, text{{ c.roles.length ? ", " + c.roles.join(", ").toLowerCase() : "" }}; picked, or generated from the background</template>
             <template v-else>Colours: its own, part of the design</template>
           </dd>
           <dd v-if="fonts" class="mt-1 text-bright">Fonts: {{ fonts.toLowerCase() }}</dd>
