@@ -78,10 +78,15 @@
   --tw-prose-counters: var(--color-dim);
   --tw-prose-quotes: var(--color-ink);
   --tw-prose-quote-borders: var(--color-violet);
+  --tw-prose-kbd: var(--color-bright);
+  --tw-prose-kbd-shadows: var(--color-line);
   max-width: 72ch;
 
   & :where(code):not(:where(pre *)) {
     @apply rounded-md bg-raised px-1.5 py-0.5 font-normal;
+  }
+  & :where(kbd) {
+    @apply bg-raised;
   }
   & :where(code):not(:where(pre *))::before,
   & :where(code):not(:where(pre *))::after {
