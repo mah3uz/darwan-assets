@@ -1,6 +1,6 @@
 # Quick start
 
-From a fresh install to both screens themed, in seven steps. `pixel-coffee` is just an example; `darwan list` shows every theme's id, and so does the [theme gallery](/themes).
+From a fresh install to both screens and the screensaver themed, in eight steps. `pixel-coffee` is just an example; `darwan list` shows every theme's id, and so does the [theme gallery](/themes).
 
 ## 1. Check your system
 
@@ -46,7 +46,18 @@ Then bind a key to `darwan lock` (see [Lockscreen keybind](/docs/usage#lockscree
 darwan lock
 ```
 
-## 5. Use it on the login screen
+## 5. Turn on the screensaver
+
+The same theme, with only its background and animation, when you step away. In the GUI, click **Screensaver** at the
+top right: it installs and starts hypridle with you, and writes its config. Try the look first:
+
+```sh
+darwan preview pixel-coffee --saver
+```
+
+[Screensaver](/docs/screensaver) has the details and the setup by hand.
+
+## 6. Use it on the login screen
 
 See it in SDDM's own greeter first:
 
@@ -66,7 +77,7 @@ Log out to see it. To go back to your previous login screen:
 darwan sddm reset
 ```
 
-## 6. Make it yours (optional)
+## 7. Make it yours (optional)
 
 Use your desktop wallpaper as the background and take the accent colour from it:
 
@@ -77,6 +88,6 @@ darwan set pixel-coffee.accent generate
 
 Or open the GUI and try things in the live preview before you save. [Customise](/docs/customise) lists everything you can change. Run `darwan sddm apply` again to bring your changes to the login screen.
 
-## 7. Add missing fonts (optional)
+## 8. Add missing fonts (optional)
 
 Eight themes use commercial fonts that can't be shipped; see [Fonts](/docs/fonts).

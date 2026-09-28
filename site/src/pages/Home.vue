@@ -13,7 +13,7 @@ const faces = [
     id: "gui",
     label: "GUI",
     command: "darwan-gui",
-    text: "A gallery on the left, a live preview in the middle that shows every change before you save it, and the theme's settings and customisations on the right. Drop an image or a video on the preview to make it the background.",
+    text: "A gallery on the left, a live preview in the middle that shows every change before you save it, and the theme's settings and customisations on the right. Drop an image or a video on the preview to make it the background, and set up the screensaver and hypridle from its Screensaver window.",
   },
   {
     id: "tui",
@@ -41,14 +41,23 @@ const installers = [
 ] as const;
 const installer = ref<(typeof installers)[number]["id"]>("paru");
 
+const saverViews = [
+  { value: "saver", label: "Screensaver" },
+  { value: "lock", label: "Lock" },
+] as const;
+const saverView = ref<(typeof saverViews)[number]["value"]>("saver");
+
 const features = [
+  { title: "A screensaver in every theme", text: "When you step away, your lock theme fades in with only its background and its animation. After a grace period you choose, it becomes the lock without a flicker." },
+  { title: "Type straight away", text: "The first key you press on the screensaver brings the lock back and lands in the password field. With several monitors, what you type shows on every one." },
+  { title: "Idle, set up for you", text: "The GUI's Screensaver window tells you whether hypridle is installed and running, writes its config, and sets the idle, screen-off and suspend times." },
+  { title: "Light on your machine", text: "Nothing runs while you work. Videos play through libmpv on your graphics card, with smaller copies or still frames if you want them, and stop while the screens are off." },
   { title: "Make it yours", text: "Your own image, GIF, video or desktop wallpaper behind a theme, colours picked or generated from it the way Material You does, your fonts, and your animation speed." },
   { title: "Light and dark", text: "Seven themes have a second look designed for them, not filtered from them, and can follow your desktop's light or dark mode." },
   { title: "Your wallpaper, found for you", text: "Set the background to desktop and Darwan finds what draws your wallpaper: DankMaterialShell, Omarchy, hyprpaper, swww, swaybg and more." },
-  { title: "One config file", text: "~/.config/darwan/config.toml holds everything, keeps your comments, and nothing inside a theme folder is ever edited." },
-  { title: "Options that know the theme", text: "Each theme declares what it supports. Options it can't use are shown disabled with the reason." },
-  { title: "Try without locking", text: "A live preview that shows each change before you save it, a full-screen preview with a mock password, SDDM's own test mode, and headless checks that type the password for you." },
-  { title: "Never locked out", text: "If a theme fails to load, you get a plain password prompt. If the lockscreen crashes, a new one takes the lock back within a second or two, and your desktop never shows." },
+  { title: "One config file", text: "~/.config/darwan/config.toml holds everything and keeps your comments. Each theme says what it supports, and options it can't use are shown disabled with the reason." },
+  { title: "Try without locking", text: "A live preview that shows each change before you save it, full-screen previews of the lock and the screensaver with a mock password, SDDM's own test mode, and headless checks that type the password for you." },
+  { title: "Never locked out", text: "If a theme fails to load, you get a plain password prompt. If the lockscreen crashes, a new one takes the lock back within a second or two, and neither a crash, the screens turning off nor sleep ever shows your desktop." },
   { title: "Your clock, everywhere", text: "12- or 24-hour time, AM/PM and a date format apply to every theme that shows them." },
   { title: "Root only where it must be", text: "A small helper writes SDDM's files through polkit and checks every value again. Nothing else runs as root." },
 ];
@@ -72,8 +81,8 @@ const features = [
           <span class="text-gate">both of your gates.</span>
         </p>
         <p class="rise mt-6 max-w-md text-lg leading-relaxed text-dim" style="--step: 3">
-          Choose, customise, preview and apply {{ themes.length }} themes to your SDDM login screen and your Quickshell
-          lockscreen, from one app on Arch Linux.
+          Choose, customise, preview and apply {{ themes.length }} themes to your SDDM login screen, your Quickshell
+          lockscreen and your screensaver, from one app on Arch Linux.
         </p>
         <CopyCommand command="paru -S darwan-bin" class="rise mt-10 max-w-sm" style="--step: 4" />
         <div class="rise mt-5 flex flex-wrap gap-3" style="--step: 5">
@@ -127,8 +136,15 @@ const features = [
           <div class="border-l-2 border-violet pl-5">
             <dt class="text-lg font-medium text-bright">The lockscreen</dt>
             <dd class="mt-1 leading-relaxed text-dim">
-              Quickshell shows it when you step away. Bind a key to
+              Quickshell shows it when you lock. Bind a key to
               <code class="font-mono text-sm text-ink">darwan lock</code> and the same theme guards your session.
+            </dd>
+          </div>
+          <div class="border-l-2 border-green pl-5">
+            <dt class="text-lg font-medium text-bright">When you step away</dt>
+            <dd class="mt-1 leading-relaxed text-dim">
+              The theme fades in as your screensaver, only its background and animation, and becomes the lock when its
+              grace period ends.
             </dd>
           </div>
         </dl>
@@ -145,6 +161,64 @@ const features = [
         <p class="mt-2 leading-relaxed text-dim">{{ f.text }}</p>
       </li>
     </ul>
+  </section>
+
+  <section class="mx-auto mt-32 max-w-7xl px-4 sm:px-6">
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_1.25fr]">
+      <div>
+        <h2 class="text-4xl font-semibold tracking-tight text-bright">A screensaver that is your lock</h2>
+        <p class="mt-4 text-lg leading-relaxed text-dim">
+          Go idle and your theme fades in without its widgets: the rain, the drifting ash, the turning dial. Come back
+          within the grace period and any key fades it away. Stay away, and the same running theme becomes the lock.
+        </p>
+        <ul class="mt-8 space-y-4 leading-relaxed text-dim">
+          <li>
+            <span class="text-bright">Type your password straight away.</span> The first key brings the widgets in and
+            lands in the password field, on every monitor.
+          </li>
+          <li>
+            <span class="text-bright">Screens off and sleep stay safe.</span> Waking shows your desktop or the password
+            prompt, never the screensaver, and a locked screensaver unloads its theme while the screens are off.
+          </li>
+          <li>
+            <span class="text-bright">Set up in one window.</span> The GUI installs and starts hypridle with you, writes
+            its config, and picks how much video your machine plays.
+          </li>
+        </ul>
+        <div class="mt-8 space-y-2">
+          <CopyCommand command="darwan preview pixel-rainyroom --saver" />
+        </div>
+        <RouterLink to="/docs/screensaver" class="mt-4 inline-block text-blue underline-offset-4 hover:underline">
+          Turn on the screensaver
+        </RouterLink>
+      </div>
+      <figure>
+        <div class="relative overflow-hidden rounded-2xl bg-surface ring-1 ring-line">
+          <div class="stack">
+            <img
+              v-for="v in saverViews"
+              :key="v.value"
+              :src="`/screens/saver-${v.value}.webp`"
+              :alt="v.value === 'saver'
+                ? 'Rainy Room as the screensaver: the rainy room and its falling rain, without the clock or the password field.'
+                : 'Rainy Room as the lock: the clock, the password field and the power buttons over the same room.'"
+              width="1280"
+              height="720"
+              loading="lazy"
+              class="aspect-video w-full object-cover transition-opacity duration-500"
+              :class="saverView === v.value ? 'opacity-100' : 'opacity-0'"
+            />
+          </div>
+          <div class="absolute right-4 bottom-4 shadow-lg">
+            <SegmentedControl v-model="saverView" :options="[...saverViews]" label="Show" kind="radios" />
+          </div>
+        </div>
+        <figcaption class="mt-3 text-sm text-dim">
+          <RouterLink to="/themes/pixel-rainyroom" class="hover:text-bright">Pixel Rainy Room</RouterLink>, as the
+          screensaver and as the lock
+        </figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="mx-auto mt-32 max-w-7xl px-4 sm:px-6">

@@ -247,6 +247,34 @@ If your setup locks through hypridle, point it at Darwan as in [Usage](/docs/usa
 whatever the idle listeners and keybinds called before (often `hyprlock`) with `loginctl lock-session` or
 `darwan lock`.
 
+## The screensaver
+
+Darwan's [screensaver](/docs/screensaver) starts from a hypridle listener that runs `darwan saver`, so hypridle has to
+own idle: turn the shell's own idle lock off, and let the listener start the screensaver, which locks after its grace
+period (`saver.lock_after`). The GUI's **Screensaver** window writes the listener; with a shell that already locks for
+you, turn its *Lock with darwan* and *Lock before sleep* switches off there, so only one program answers each lock.
+
+| Shell | For the screensaver |
+|:--|:--|
+| DankMaterialShell | set DMS's idle lock (and its screen-off timeout, if hypridle turns the screens off) to never in **Settings → Power & Sleep**; keep its Lock before suspend; in hypridle, only the `darwan saver` and screen-off listeners, no `lock_cmd` |
+| Noctalia | set `enabled = false` under `[idle.behavior.lock]` and add the `darwan saver` listener to the hypridle config above |
+| Caelestia | drop the `darwan lock` entry from `general.idle.timeouts` and add the `darwan saver` listener to hypridle |
+| illogical-impulse | replace the idle listener's `loginctl lock-session` with `darwan saver` |
+| Omarchy 4 | replace the listener's `loginctl lock-session` with `darwan saver` |
+| Omarchy 3 | replace both listeners (Omarchy's screensaver at 150 seconds and the lock at 152) with one that runs `darwan saver` |
+
+The listener:
+
+```ini
+listener {
+    timeout = 300
+    on-timeout = darwan saver
+}
+```
+
+and in `general`, `after_sleep_cmd = darwan resumed` (followed by your usual command to turn the screens on), so
+opening a lid without touching anything doesn't bring the screensaver straight back.
+
 ## Starting hypridle
 
 In a session started by uwsm, run it as the systemd user service that comes with hypridle:
@@ -272,6 +300,8 @@ or, in a classic `hyprland.conf`, `exec-once = hypridle`.
 2. Press your lock key, run `loginctl lock-session`, and let the machine go idle. Each should show your Darwan theme.
    If the shell's own lockscreen appears for any of them, that path still reaches it.
 3. Suspend and wake. The theme should be on screen, or a black lock that turns into it, never your desktop.
+4. Leave the machine idle for the screensaver: your theme without its widgets should fade in, never the shell's own
+   screensaver or lockscreen.
 
 ## The login screen
 

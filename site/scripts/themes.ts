@@ -90,6 +90,8 @@ for (const file of new Glob("**/darwan.toml").scanSync(themesDir)) {
       .map((v) => variantMedia(slug, v)),
     still: `/stills/${slug}.webp`,
     animation: `/assets/${slug}.webp`,
+    // The theme as the screensaver (`darwan preview <id> --saver --shot`), in public/ambient.
+    ambient: existsSync(join(site, "public", "ambient", `${slug}.webp`)) ? `/ambient/${slug}.webp` : null,
   });
 }
 

@@ -19,7 +19,19 @@ const background = { video: "Video", image: "Still image", color: "Plain colour"
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const look = ref(props.theme.defaultVariant ?? "");
-watch(() => props.theme.id, () => (look.value = props.theme.defaultVariant ?? ""));
+// The lockscreen, or the same theme as the screensaver: its background and animation without the widgets.
+const view = ref<"lock" | "saver">("lock");
+const views = [
+  { value: "lock", label: "Lock" },
+  { value: "saver", label: "Screensaver" },
+] as const;
+watch(
+  () => props.theme.id,
+  () => {
+    look.value = props.theme.defaultVariant ?? "";
+    view.value = "lock";
+  },
+);
 const looks = computed(() =>
   props.theme.defaultVariant
     ? [props.theme.defaultVariant, ...props.theme.variants.map((v) => v.name)].map((v) => ({ value: v, label: capital(v) }))
@@ -27,6 +39,7 @@ const looks = computed(() =>
 );
 // The default look plays its unlock animation; another look shows its own animation, or a still of it.
 const media = computed(() => {
+  if (view.value === "saver" && props.theme.ambient) return { src: props.theme.ambient, animated: false };
   const v = props.theme.variants.find((v) => v.name === look.value);
   return v ? { src: v.animation ?? v.still ?? props.theme.still, animated: v.animation !== null } : { src: props.theme.animation, animated: true };
 });
@@ -73,17 +86,28 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
     </div>
     <div class="relative">
       <img
-        :key="theme.id + look"
+        :key="theme.id + look + view"
         :src="media.src"
-        :alt="media.animated
-          ? `${theme.name} unlocking: the password is typed and the theme plays its unlock animation.`
-          : `${theme.name} in its ${look} look.`"
+        :alt="view === 'saver'
+          ? `${theme.name} as the screensaver: its background and animation, without the widgets.`
+          : media.animated
+            ? `${theme.name} unlocking: the password is typed and the theme plays its unlock animation.`
+            : `${theme.name} in its ${look} look.`"
         width="1920"
         height="1080"
         class="aspect-video w-full bg-surface object-cover"
         :style="{ backgroundImage: `url(${theme.still})`, backgroundSize: 'cover' }"
       />
-      <div v-if="looks.length" class="absolute top-4 right-4 shadow-lg">
+      <div v-if="theme.ambient" class="absolute bottom-4 left-4 shadow-lg">
+        <SegmentedControl
+          v-model="view"
+          :options="[...views]"
+          label="Show"
+          kind="radios"
+          @update:model-value="(v: string) => track('Theme view', { theme: theme.id, view: v })"
+        />
+      </div>
+      <div v-if="looks.length && view === 'lock'" class="absolute top-4 right-4 shadow-lg">
         <SegmentedControl
           v-model="look"
           :options="looks"
@@ -106,11 +130,14 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
 
         <div class="mt-8 space-y-2">
           <CopyCommand :command="`darwan preview ${theme.id}`" />
+          <CopyCommand :command="`darwan preview ${theme.id} --saver`" />
           <CopyCommand :command="`darwan set lock.theme ${theme.id}`" />
           <CopyCommand :command="`darwan sddm apply ${theme.id}`" />
         </div>
         <p class="mt-3 text-sm text-dim">
-          Preview it without locking, use it for your lockscreen, or put it on your login screen.
+          Preview it without locking, as the lock or as the
+          <RouterLink to="/docs/screensaver" class="text-blue underline-offset-4 hover:underline">screensaver</RouterLink>,
+          use it for your lockscreen, or put it on your login screen.
         </p>
 
         <h3 class="mt-10 text-lg font-medium text-bright">Make it yours</h3>

@@ -34,9 +34,9 @@ Your AUR helper or `makepkg -s` installs these for you.
 
 | | Packages |
 |--:|:--|
-| **Required** | `quickshell` `qt6-base` `qt6-declarative` `qt6-5compat` `qt6-multimedia` `qt6-multimedia-ffmpeg` `polkit` `ttf-jetbrains-mono-nerd` |
-| **Optional** | `sddm` (the login screen), `libfaketime` (`darwan preview --at`), `noto-fonts-cjk` (Chinese text in Genshin Impact) |
-| **Build** (`darwan` only) | `rust` `lld` `librsvg` |
+| **Required** | `quickshell` `qt6-base` `qt6-declarative` `qt6-5compat` `qt6-multimedia` `qt6-multimedia-ffmpeg` `mpvqt` `polkit` `ttf-jetbrains-mono-nerd` |
+| **Optional** | `sddm` (the login screen), `hypridle` (the [screensaver](/docs/screensaver)), `libfaketime` (`darwan preview --at`), `noto-fonts-cjk` (Chinese text in Genshin Impact) |
+| **Build** (`darwan` only) | `rust` `lld` `librsvg` `cmake` |
 
 ## What gets installed
 
@@ -45,6 +45,7 @@ Your AUR helper or `makepkg -s` installs these for you.
 | `/usr/bin/darwan` | CLI and TUI |
 | `/usr/bin/darwan-gui` | GUI, also in your app launcher as *Darwan* |
 | `/usr/lib/darwan/darwan-helper` | privileged SDDM helper, run through `pkexec` |
+| `/usr/lib/darwan/qml/Darwan/` | the QML plugin that plays videos through libmpv and wakes the screensaver |
 | `/usr/share/darwan/runtime/` | the QML runtime shared by the lockscreen and the previews |
 | `/usr/share/darwan/themes/` | all 40 themes |
 | `/usr/share/polkit-1/actions/org.darwan.policy` | lets the helper ask for your password once per session |

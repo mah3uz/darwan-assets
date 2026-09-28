@@ -16,6 +16,10 @@ show_ampm = false
 [date]
 format = "ddd, MMM d"   # one of the presets below; unset, each theme keeps its own
 
+[saver]
+lock_after = 10         # seconds from the screensaver to the lock; 0 locks at once, "never" never locks
+quality = "full"        # "full" | "auto" | "eco" | "still"
+
 [themes."clockwork/orbital"]
 variant = "light"       # a customisation, see below
 enableWindup = false    # one of Orbital's own options
@@ -38,6 +42,12 @@ The clock settings reach the 38 themes that show a clock and the date setting th
 | `yyyy-MM-dd` | 2026-09-26 |
 | `dd/MM/yyyy` | 26/09/2026 |
 | `MM/dd/yyyy` | 09/26/2026 |
+
+## Screensaver
+
+`saver.lock_after` is the grace period before the screensaver locks (10 seconds), and `saver.quality` what its videos
+play: `full` as shipped, `auto` chosen from your hardware and power, `eco` smaller copies, `still` a still frame.
+[Screensaver](/docs/screensaver) explains both; they apply to every theme.
 
 ## Per-theme options
 

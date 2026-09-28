@@ -49,6 +49,10 @@ also copies your background and font files for SDDM, because SDDM can't read you
 | `background_fit` | `cover` fills the screen (the default); `contain` shows all of it |
 | `background_dim` | `0` to `80`, the percentage to darken it by so text stays readable |
 
+Videos and animated GIFs play through libmpv on your graphics card on the lockscreen and in the
+[screensaver](/docs/screensaver). A GIF or WebP gets a video copy the first time you choose it, kept in
+`~/.cache/darwan/media`, so it decodes on the GPU too instead of frame by frame on the CPU.
+
 `desktop` finds whatever draws your wallpaper and uses its current file, so the lockscreen follows when you change it.
 It knows [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell), Omarchy, Caelestia, Noctalia,
 hyprpaper, awww, swww, gSlapper, mpvpaper, swaybg and waypaper; `darwan doctor` shows which one it found. Where your

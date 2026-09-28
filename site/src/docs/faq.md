@@ -4,6 +4,18 @@
 
 Darwan shows its fallback password prompt when a theme fails to load, and if the lockscreen crashes it starts a new one by itself, which takes the lock back within a second or two. If the lockscreen hangs instead, switch to a text console (`Ctrl+Alt+F3`), log in and run `darwan lock --replace`, then switch back and unlock. [Lock recovery](/docs/lock-recovery) covers every case. Afterwards, run `darwan check <theme>` and [open an issue](https://github.com/mah3uz/darwan/issues) with the output.
 
+## The screensaver never starts?
+
+Run `darwan doctor`: its *Screensaver* section checks each part. hypridle has to be running and its config needs a
+`darwan saver` listener; the GUI's **Screensaver** window shows both and fixes them. A video playing in a browser or a
+player keeps idle off on purpose. [Screensaver](/docs/screensaver#troubleshooting) has more.
+
+## Does the screensaver slow my machine?
+
+Nothing runs while you work. While it shows, a theme with a 4K video takes about 4% of one CPU core and a still-image
+theme next to nothing; with the screens off, a locked screensaver unloads its theme. On a laptop, set
+`saver.quality = "auto"` to use smaller copies of the videos on battery.
+
 ## A virtual keyboard pops up on the login screen?
 
 Open `/etc/sddm.conf.d/virtualkeyboard.conf` as root and empty `InputMethod`:
