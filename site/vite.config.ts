@@ -21,7 +21,7 @@ const links: Record<string, string> = {
 // Highlighted at build time, so the page ships coloured HTML and no highlighter. Every docs code block uses one of these.
 const highlighter = await createHighlighter({
   themes: ["tokyo-night", "github-light"],
-  langs: ["sh", "toml", "ini", "qml", "lua"],
+  langs: ["sh", "toml", "ini", "qml", "lua", "json"],
 });
 
 // Each code block gets a copy button; Docs.vue handles the click.

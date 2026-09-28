@@ -50,7 +50,7 @@ Below the preview: *Use for lock*, *Lock now*, *Full-screen preview*, *Apply to 
 
 ## Lockscreen keybind
 
-*Use for lock* only chooses the theme. To lock with Darwan, point your lock keybind and idle locker at `darwan lock`, and let a new locker take over if one ever crashes. In Hyprland's Lua config:
+*Use for lock* only chooses the theme. To lock with Darwan, point your lock keybind and idle locker at `darwan lock`, and let a new locker take over if one ever crashes. Using DankMaterialShell, Noctalia, Caelestia, illogical-impulse or Omarchy? They have a lockscreen of their own; [Desktop shells](/docs/shells) shows how to hand it to Darwan. In Hyprland's Lua config:
 
 ```lua
 hl.config({ misc = { allow_session_lock_restore = true } })

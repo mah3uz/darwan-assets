@@ -2,6 +2,8 @@
 
 Darwan themes the SDDM login screen with the same themes and settings as your lockscreen. You can use one theme for both, or a different one for each.
 
+It needs SDDM as your display manager. DankMaterialShell's and Noctalia's greeters run on greetd instead, and Omarchy logs you in automatically: [Desktop shells](/docs/shells#the-login-screen) shows how to switch, and when you'll see the login screen.
+
 | Command | Does |
 |:--|:--|
 | `darwan sddm preview [theme]` | shows the theme in SDDM's own greeter, in test mode, before you apply it |
