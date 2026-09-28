@@ -27,10 +27,10 @@ const nav = [
     class="sticky top-0 z-40 border-b transition-colors duration-300"
     :class="scrolled ? 'border-line bg-night/80 backdrop-blur-lg' : 'border-transparent'"
   >
-    <nav class="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
-      <RouterLink to="/" class="mr-auto flex items-center gap-2.5 font-semibold tracking-tight text-bright">
+    <nav class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:gap-6 sm:px-6">
+      <RouterLink to="/" class="mr-auto flex shrink-0 items-center gap-2.5 font-semibold tracking-tight text-bright" aria-label="Darwan home">
         <img src="/darwan.svg" alt="" class="size-8" />
-        <span class="text-lg">Darwan</span>
+        <span class="hidden text-lg min-[26rem]:inline">Darwan</span>
       </RouterLink>
       <RouterLink
         v-for="item in nav"

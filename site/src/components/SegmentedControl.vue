@@ -2,12 +2,14 @@
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
-  options: { value: T; label: string; hint?: number }[];
+  options: { value: T; label: string; hint?: number; disabled?: boolean }[];
   label: string;
   kind: "tabs" | "radios";
   // Tabs get ids `${id}-${value}` and control panels `${id}-${value}-panel`.
   id?: string;
   mono?: boolean;
+  // Phones: fill the row, splitting it evenly between the options.
+  stretch?: boolean;
 }>();
 const model = defineModel<T>({ required: true });
 
@@ -26,8 +28,13 @@ function onKey(e: KeyboardEvent) {
   const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
   if (!step) return;
   e.preventDefault();
-  const i = props.options.findIndex((o) => o.value === model.value);
-  const next = (i + step + props.options.length) % props.options.length;
+  const n = props.options.length;
+  let next = props.options.findIndex((o) => o.value === model.value);
+  // Arrows skip options that are disabled.
+  for (let tries = 0; tries < n; tries++) {
+    next = (next + step + n) % n;
+    if (!props.options[next].disabled) break;
+  }
   model.value = props.options[next].value;
   buttons[next]?.focus();
 }
@@ -48,7 +55,8 @@ watch(model, place, { flush: "post" });
     ref="root"
     :role="kind === 'tabs' ? 'tablist' : 'radiogroup'"
     :aria-label="label"
-    class="relative flex flex-wrap gap-1 rounded-xl bg-surface p-1 ring-1 ring-line"
+    class="relative flex max-w-full gap-1 overflow-x-auto rounded-xl bg-surface p-1 ring-1 ring-line [scrollbar-width:none]"
+    :class="stretch ? 'w-full sm:w-fit' : 'w-fit'"
     @keydown="onKey"
   >
     <span
@@ -68,11 +76,12 @@ watch(model, place, { flush: "post" });
       :aria-selected="kind === 'tabs' ? model === o.value : undefined"
       :aria-checked="kind === 'radios' ? model === o.value : undefined"
       :tabindex="model === o.value ? 0 : -1"
-      class="relative rounded-lg px-3.5 py-1.5 text-sm transition-colors duration-300"
-      :class="[model === o.value ? 'text-bright' : 'text-dim hover:text-ink', mono ? 'font-mono' : 'font-medium']"
+      :disabled="o.disabled && model !== o.value"
+      class="relative shrink-0 rounded-lg px-2 py-1.5 text-xs whitespace-nowrap transition-colors duration-300 min-[360px]:px-2.5 min-[360px]:text-sm sm:px-3.5"
+      :class="[model === o.value ? 'text-bright' : 'text-dim enabled:hover:text-ink disabled:opacity-40', mono ? 'font-mono' : 'font-medium', stretch && 'flex-1 sm:flex-none']"
       @click="model = o.value"
     >
-      {{ o.label }}<span v-if="o.hint !== undefined" class="ml-1.5 tabular-nums text-dim">{{ o.hint }}</span>
+      {{ o.label }}<span v-if="o.hint !== undefined" class="ml-1 tabular-nums text-dim min-[360px]:ml-1.5">{{ o.hint }}</span>
     </button>
   </div>
 </template>

@@ -58,6 +58,19 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
     @close="close"
     @click.self="dialog?.close()"
   >
+    <!-- Pinned over the top of the dialog, so closing is always one tap away, even scrolled down on a phone. -->
+    <div class="sticky top-0 z-10 h-0">
+      <button
+        type="button"
+        class="absolute top-3 left-3 grid size-9 place-items-center rounded-full bg-night/75 text-ink ring-1 ring-line backdrop-blur hover:text-bright"
+        aria-label="Close"
+        @click="dialog?.close()"
+      >
+        <svg viewBox="0 0 16 16" class="size-4 fill-none stroke-current stroke-2" aria-hidden="true">
+          <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
     <div class="relative">
       <img
         :key="theme.id + look"
@@ -81,20 +94,11 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
       </div>
     </div>
 
-    <div class="grid gap-10 p-6 sm:p-8 lg:grid-cols-[1fr_22rem]">
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-10 p-5 sm:p-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <div>
-        <div class="flex items-start justify-between gap-4">
-          <h2 id="theme-title" class="text-3xl font-semibold tracking-tight text-bright">
-            <span v-if="theme.family" class="text-dim">{{ theme.family }}&nbsp;</span>{{ theme.name }}
-          </h2>
-          <button
-            type="button"
-            class="shrink-0 rounded-lg px-3 py-1.5 text-sm text-ink ring-1 ring-line hover:bg-surface hover:text-bright"
-            @click="dialog?.close()"
-          >
-            Close
-          </button>
-        </div>
+        <h2 id="theme-title" class="text-2xl font-semibold tracking-tight text-bright sm:text-3xl">
+          <span v-if="theme.family" class="text-dim">{{ `${theme.family} ` }}</span>{{ theme.name }}
+        </h2>
         <p class="mt-2 text-dim">
           By {{ theme.author ?? "unknown" }}<template v-if="credit">, wallpaper from
             <a :href="credit.url" rel="noopener" class="text-ink underline underline-offset-4">{{ credit.source }}</a></template>.
