@@ -48,8 +48,8 @@ darwan lock
 
 ## 5. Turn on the screensaver
 
-The same theme, with only its background and animation, when you step away. In the GUI, click *When you step away*
-on the start screen: it installs and starts hypridle with you, and writes its config when you save. Try the look
+The same theme, with only its background and animation, when you step away. In the GUI, open ⚙ → *Screensaver*:
+it installs and starts hypridle with you, and writes its config when you save. Try the look
 first:
 
 ```sh

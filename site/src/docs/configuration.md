@@ -18,10 +18,17 @@ format = "ddd, MMM d"   # one of the presets below; unset, each theme keeps its 
 
 [saver]
 lock_after = 10         # seconds from the screensaver to the lock; 0 locks at once, "never" never locks
+return_after = 30       # seconds an untouched lock keeps its widgets before the screensaver comes back; 5 or more
+screen_off_locked = 300 # seconds an untouched lock keeps the screens on, or "never"; 10 or more (Hyprland)
 quality = "full"        # "full" | "auto" | "eco" | "still"
 
 [gui]
 look = "darwan"         # "darwan" | "system" to follow your Qt theme's colours and font
+
+[wallpaper]
+folder = "~/Pictures/Wallpapers"
+allow = ["anime", "games"]   # optional groups to show online; sexual content is never shown
+colours = ["matugen"]        # run after each wallpaper change
 
 [themes."clockwork/orbital"]
 variant = "light"       # a customisation, see below
@@ -48,14 +55,25 @@ The clock settings reach the 38 themes that show a clock and the date setting th
 
 ## Screensaver
 
-`saver.lock_after` is the grace period before the screensaver locks (10 seconds), and `saver.quality` what its videos
-play: `full` as shipped, `auto` chosen from your hardware and power, `eco` smaller copies, `still` a still frame.
-[Screensaver](/docs/screensaver) explains both; they apply to every theme.
+| Setting | Default | Does |
+|:--|:--|:--|
+| `saver.lock_after` | `10` | seconds of grace before the screensaver locks; `0` locks at once, `never` never locks |
+| `saver.return_after` | `30` | seconds a lock left untouched keeps its widgets before the screensaver comes back; `5` or more |
+| `saver.screen_off_locked` | `300` | seconds a lock left untouched keeps the screens on, or `never`; `10` or more, on Hyprland |
+| `saver.quality` | `full` | what its videos play: `full` as shipped, `auto` chosen from your hardware and power, `eco` smaller copies, `still` a still frame |
+
+[Screensaver](/docs/screensaver) explains them; they apply to every theme.
+
+## Wallpapers
+
+`wallpaper.folder` is where your wallpapers live, `wallpaper.allow` which optional groups show online, `wallpaper.restart`
+the wallpaper tools Darwan may restart without asking, and `wallpaper.colours` the colour generators to run after each
+change. [Wallpapers](/docs/wallpapers) lists their values.
 
 ## The GUI's look
 
 `gui.look` is the GUI's own look: `darwan`, its greys and blue with frosted glass over a blurred theme, or `system` to
-follow your Qt theme's colours and font. The switch on the GUI's left edge sets it.
+follow your Qt theme's colours and font. ⚙ → *Appearance* in the GUI sets it.
 
 ## Per-theme options
 

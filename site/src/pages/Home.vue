@@ -13,7 +13,7 @@ const faces = [
     id: "gui",
     label: "GUI",
     command: "darwan-gui",
-    text: "Every theme as a card that plays its unlock when you hover it. Open one and it fills the window, live, with its settings beside it and every change shown before you save it. Drop an image or a video on it to make it the background, and set up the screensaver and hypridle from the start screen.",
+    text: "Every theme as a card that plays its unlock when you hover it. Open one and it fills the window, live, with its settings beside it and every change shown before you save it. Drop an image or a video on it to make it the background, browse and set wallpapers, and set up the screensaver and hypridle under ⚙.",
   },
   {
     id: "tui",
@@ -50,11 +50,11 @@ const saverView = ref<(typeof saverViews)[number]["value"]>("saver");
 const features = [
   { title: "A screensaver in every theme", text: "When you step away, your lock theme fades in with only its background and its animation. After a grace period you choose, it becomes the lock without a flicker." },
   { title: "Type straight away", text: "The first key you press on the screensaver brings the lock back and lands in the password field. With several monitors, what you type shows on every one." },
-  { title: "Idle, set up for you", text: "The GUI tells you whether hypridle is installed and running, writes its config, and shows the idle, lock, screen-off and suspend times as one timeline." },
+  { title: "Idle, set up for you", text: "The GUI tells you whether hypridle is installed and running, writes its config, shows the idle, lock, screen-off and suspend times as one timeline, and names any shell timer that would act too." },
   { title: "Light on your machine", text: "Nothing runs while you work. Videos play through libmpv on your graphics card, with smaller copies or still frames if you want them, and stop while the screens are off." },
   { title: "Make it yours", text: "Your own image, GIF, video or desktop wallpaper behind a theme, colours picked or generated from it the way Material You does, your fonts, and your animation speed." },
   { title: "Light and dark", text: "Seven themes have a second look designed for them, not filtered from them, and can follow your desktop's light or dark mode." },
-  { title: "Your wallpaper, found for you", text: "Set the background to desktop and Darwan finds what draws your wallpaper: DankMaterialShell, Omarchy, hyprpaper, swww, swaybg and more." },
+  { title: "Wallpapers, set for you", text: "Browse your folder and free wallpapers from Wallhaven, Bing, NASA and Wikimedia Commons, never anything sexual, and set one through whatever draws your desktop: DankMaterialShell, Omarchy, hyprpaper, swww, swaybg and more." },
   { title: "One config file", text: "~/.config/darwan/config.toml holds everything and keeps your comments. Each theme says what it supports, and options it can't use are shown disabled with the reason." },
   { title: "Try without locking", text: "A live preview that shows each change before you save it, full-screen previews of the lock and the screensaver with a mock password, SDDM's own test mode, and headless checks that type the password for you." },
   { title: "Never locked out", text: "If a theme fails to load, you get a plain password prompt. If the lockscreen crashes, a new one takes the lock back within a second or two, and neither a crash, the screens turning off nor sleep ever shows your desktop." },
@@ -177,12 +177,13 @@ const features = [
             lands in the password field, on every monitor.
           </li>
           <li>
-            <span class="text-bright">Screens off and sleep stay safe.</span> Waking shows your desktop or the password
-            prompt, never the screensaver, and a locked screensaver unloads its theme while the screens are off.
+            <span class="text-bright">Screens off and sleep stay safe.</span> A lock nobody touches turns the screens
+            off, and waking shows your desktop or the password prompt, never the screensaver. A locked screensaver
+            unloads its theme while the screens are off.
           </li>
           <li>
-            <span class="text-bright">Set up from the start screen.</span> The GUI installs and starts hypridle with you, writes
-            its config, and picks how much video your machine plays.
+            <span class="text-bright">Set up in the GUI.</span> ⚙ → Screensaver installs and starts hypridle with you,
+            writes its config, and picks how much video your machine plays.
           </li>
         </ul>
         <div class="mt-8 space-y-2">

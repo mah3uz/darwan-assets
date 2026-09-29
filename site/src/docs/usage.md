@@ -18,10 +18,12 @@ Darwan is one app with three faces. `darwan` with a command is the CLI, `darwan`
 | `darwan check <theme>… \| --all` | headless test: QML errors, missing fonts, and whether typing the password unlocks |
 | `darwan sddm apply`, `preview`, `status`, `reset` | manage the login screen ([details](/docs/login-screen)) |
 | `darwan font import <theme> <file>` | install a licensed font a theme needs |
+| `darwan wallpaper set <file> [-o DP-1]` | set the desktop wallpaper through whatever draws it ([details](/docs/wallpapers)) |
+| `darwan wallpaper status`, `list`, `prepare`, `online` | what draws it; your folder; thumbnails ahead of time; browse and download online |
 | `darwan doctor` | check the session, Quickshell, fonts, the helper and SDDM's config |
 | `darwan completion bash\|zsh\|fish` | print the tab-completion script for your shell |
 
-Setting keys are `lock.theme`, `sddm.theme`, `clock.format`, `clock.show_ampm`, `date.format`, `saver.lock_after`, `saver.quality`, `<theme>.<option>` for a theme's own options, and `<theme>.<setting>` for [customisations](/docs/customise) such as `pixel-coffee.background` or `nothing.variant`.
+Setting keys are `lock.theme`, `sddm.theme`, `clock.format`, `clock.show_ampm`, `date.format`, the screensaver's `saver.*`, the [wallpaper](/docs/wallpapers) pages' `wallpaper.*`, `gui.look`, `<theme>.<option>` for a theme's own options, and `<theme>.<setting>` for [customisations](/docs/customise) such as `pixel-coffee.background` or `nothing.variant`.
 
 Tab completion offers theme ids, setting keys and each key's values. Load it when your shell starts, so it stays in step with the installed version:
 
@@ -49,9 +51,9 @@ Run `darwan` in a terminal. Themes are grouped into Clockwork, Pixel and Other t
 
 Run `darwan-gui`, or open *Darwan* from your launcher.
 
-![The start screen: your lockscreen and login screen at the top, what happens when you step away, and every theme as a card.](/screens/gui-wall.webp)
+![The start screen: your lockscreen theme behind its name, both gates side by side, and every theme as a card below.](/screens/gui-wall.webp)
 
-**The start screen** shows your two gates, the lockscreen and the login screen, with *Lock now*, *Test* and *Customise*. Under them, *When you step away* sums up the [screensaver](/docs/screensaver) and opens into its settings. Then every theme as a card: hover one, or move to it with the arrow keys, to watch it unlock. The chips filter by family, video backgrounds, themes that bring their own font, or the ones in use; `Ctrl+F` searches. **Doctor** at the top turns amber when something needs a look, and runs the full check when clicked.
+**The start screen** opens on your lockscreen theme, filling the window behind its name, with *Customise* and *Lock now*. The two cards under it are your gates, the lockscreen and the login screen: click the login screen to feature it instead (with *Test*), and hover either to watch it unlock. Then every theme as a card: hover one, or move to it with the arrow keys, to watch it unlock. The chips filter by family, video backgrounds, themes that bring their own font, or the ones in use; `Ctrl+F` searches. **Doctor** at the top turns amber when something needs a look, and runs the full check when clicked.
 
 ![A theme open: the live theme fills the window, with its settings beside it.](/screens/gui.webp)
 
@@ -59,7 +61,9 @@ Run `darwan-gui`, or open *Darwan* from your launcher.
 
 **The settings** sit beside it (`Ctrl+I` hides them): *This theme* for its background, look, colours, fonts, motion and [customisations](/docs/customise), *All themes* for the clock and date. The preview shows every change at once; nothing is written until *Save* (`Ctrl+S`), and *Discard* goes back. Closing the window or running a command with unsaved changes asks you to save or discard first. Drop an image or video on the preview to use it as the background. A colour opens a picker: the theme's own, generated from the background, or your own from a colour wheel, a pasted code or swatches. *Reset* in the ⋯ menu puts every setting of the theme back to its default, unsaved until you press *Save*.
 
-**The look** switch on the window's left edge picks Darwan's own look or your system's Qt theme (`gui.look`), saved as you pick. **⚙** holds the clock and date and the screensaver.
+**Wallpapers**: *Home*, *Library* and *Explore* in the pill at the top show your wallpaper folder and free wallpapers online; open one and *Set Wallpaper* ([Wallpapers](/docs/wallpapers)).
+
+**⚙** holds the look (Darwan's own, the default, or your system's Qt theme, `gui.look`, saved as you pick), the clock and date, and the [screensaver](/docs/screensaver).
 
 ## Lockscreen keybind
 
@@ -96,7 +100,7 @@ listener {
 ```
 
 The listener starts the [screensaver](/docs/screensaver) after five minutes idle, and the GUI's screensaver settings
-write all of this for you.
+(⚙ → *Screensaver*) write all of this for you.
 
 `inhibit_sleep = 3` matters: hypridle's default waits for the lock only when the command is hyprlock, so without it the machine can go to sleep before Darwan's lock is on screen. `darwan doctor` checks this.
 

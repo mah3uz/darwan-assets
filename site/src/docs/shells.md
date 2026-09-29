@@ -263,6 +263,21 @@ you, turn their *Lock with Darwan* and *Lock before sleep* switches off, so only
 | Omarchy 4 | replace the listener's `loginctl lock-session` with `darwan saver` |
 | Omarchy 3 | replace both listeners (Omarchy's screensaver at 150 seconds and the lock at 152) with one that runs `darwan saver` |
 
+### Their own idle timers
+
+A shell's idle timers act whatever Darwan's settings say: a DMS screen-off at 20 minutes turns the screens off even
+with Darwan's *Screen off* at *Never*. ⚙ → *Screensaver* in the GUI names any shell or idle daemon that still locks,
+turns the screens off or suspends on its own, with what it does and when, and `darwan doctor` warns about it. Turn
+them off where they live:
+
+| Shell or daemon | Where its idle timers are |
+|:--|:--|
+| DankMaterialShell | **Settings → Power & Sleep**: lock, turn off monitors, turn off monitors after lock, suspend, on AC and on battery |
+| Noctalia | **Settings → Idle**, or `[idle.behavior.*]` in `~/.config/noctalia/` |
+| Caelestia | `general.idle.timeouts` in `~/.config/caelestia/shell.json`; on out of the box (lock at 3 minutes, screens off at 5, suspend at 10) |
+| Omarchy's shell | `idle` in `~/.config/omarchy/shell.json` (its screensaver and lock) |
+| swayidle | its `timeout` arguments, wherever you start it |
+
 The listener:
 
 ```ini
@@ -302,6 +317,7 @@ or, in a classic `hyprland.conf`, `exec-once = hypridle`.
 3. Suspend and wake. The theme should be on screen, or a black lock that turns into it, never your desktop.
 4. Leave the machine idle for the screensaver: your theme without its widgets should fade in, never the shell's own
    screensaver or lockscreen.
+5. Open ⚙ → *Screensaver* in the GUI: no shell should be listed as also acting on idle.
 
 ## The login screen
 

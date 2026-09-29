@@ -34,9 +34,9 @@ Your AUR helper or `makepkg -s` installs these for you.
 
 | | Packages |
 |--:|:--|
-| **Required** | `quickshell` `qt6-base` `qt6-declarative` `qt6-5compat` `qt6-multimedia` `qt6-multimedia-ffmpeg` `mpvqt` `polkit` `ttf-jetbrains-mono-nerd` |
+| **Required** | `quickshell` `qt6-base` `qt6-declarative` `qt6-imageformats` `qt6-svg` `qt6-5compat` `qt6-multimedia` `qt6-multimedia-ffmpeg` `mpvqt` `polkit` `ttf-jetbrains-mono-nerd` |
 | **Optional** | `sddm` (the login screen), `hypridle` (the [screensaver](/docs/screensaver)), `libfaketime` (`darwan preview --at`), `noto-fonts-cjk` (Chinese text in Genshin Impact) |
-| **Build** (`darwan` only) | `rust` `lld` `librsvg` `cmake` |
+| **Build** (`darwan` only) | `rust` `lld` `librsvg` `cmake` `qt6-shadertools` |
 
 ## What gets installed
 

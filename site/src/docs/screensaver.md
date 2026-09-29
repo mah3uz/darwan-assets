@@ -13,18 +13,19 @@ into the password field.
 | You come back within the grace period | any key or click fades it away, straight back to your desktop, no password |
 | The grace period ends | it locks without a flicker: the same running theme becomes the lockscreen |
 | You press a key on the locked screensaver | the widgets come in, and the key lands in the password field |
-| You wake the lock and leave it | after 30 seconds it goes back to the screensaver; at the next idle timeout it does so even with a half-typed password, which it forgets |
+| You wake the lock and leave it | after 30 seconds (`saver.return_after`) it goes back to the screensaver, whether you locked by hand or it locked; at the next idle timeout it does so even with a half-typed password, which it forgets |
+| Nobody touches the lock | after 5 minutes (`saver.screen_off_locked`) the screens turn off, counted from the lock and from every touch; any key or mouse move turns them back on (Hyprland) |
 | The screens turn off | an unlocked screensaver ends, so waking shows your desktop; a locked one swaps its theme for a black lock, so waking shows the password prompt |
 | The machine sleeps and wakes | the lock and its password prompt, never the screensaver |
-| You have several monitors | the theme runs on every screen, and what you type shows on all of them |
+| You have several monitors | the theme runs on every screen, whatever your compositor calls them, and what you type shows on all of them; a screen left on a username field never shows your password |
 
 The grace period is `saver.lock_after`: 10 seconds unless you change it, `0` to lock the moment the screensaver
 appears, or `never` for a screensaver that never locks.
 
 ## Turn it on
 
-The screensaver starts from **hypridle**, Hyprland's idle daemon. The quickest way is the GUI: open *Darwan*, click
-*When you step away* on the start screen (or ⚙ → *Screensaver*), and follow what it says. It shows the idle,
+The screensaver starts from **hypridle**, Hyprland's idle daemon. The quickest way is the GUI: open *Darwan*, go to
+⚙ → *Screensaver*, and follow what it says. It shows the idle,
 lock, screen-off and suspend times as one timeline: click a point to change it. Changes are saved with *Save*, like
 every other setting.
 
@@ -55,8 +56,9 @@ every other setting.
    already, the GUI changes it in place when you save, keeps your own lines and comments, and restarts hypridle so
    the change applies.
 
-4. **Turn your shell's own idle lock off**, if it has one ([Desktop shells](/docs/shells#the-screensaver)), or both
-   answer when you go idle.
+4. **Turn your shell's own idle timers off**, if it has them ([Desktop shells](/docs/shells#the-screensaver)), or both
+   answer when you go idle. The GUI names any shell that still locks, turns the screens off or suspends on its own,
+   and where to turn it off.
 
 Then run `darwan doctor`: its *Screensaver* section checks each of these.
 
@@ -99,13 +101,21 @@ and start it again.
 
 ## Settings
 
-Both are in the GUI's screensaver settings, and in `~/.config/darwan/config.toml`:
+All four are in the GUI's screensaver settings (⚙ → *Screensaver*), and in `~/.config/darwan/config.toml`:
 
 ```toml
 [saver]
-lock_after = 10     # seconds of grace before it locks; 0 locks at once, "never" never locks
-quality = "full"    # "full" | "auto" | "eco" | "still"
+lock_after = 10         # seconds of grace before it locks; 0 locks at once, "never" never locks
+return_after = 30       # seconds an untouched lock keeps its widgets before the screensaver comes back; 5 or more
+screen_off_locked = 300 # seconds an untouched lock keeps the screens on, or "never"; 10 or more
+quality = "full"        # "full" | "auto" | "eco" | "still"
 ```
+
+`return_after` never hides the widgets while something is typed. `screen_off_locked` works on Hyprland: Darwan turns
+the screens off itself and back on at the first key or mouse move, and a video playing behind the lock doesn't keep
+them on. It counts from the lock, so a lock you start by hand gets the same five minutes as one the screensaver
+starts. hypridle's own screen-off listener still counts from the moment you went idle, locked or not; whichever comes
+first turns the screens off.
 
 `quality` decides what the theme videos play:
 
@@ -128,8 +138,8 @@ Without waiting for idle, and without locking anything:
 darwan preview pixel-rainyroom --saver
 ```
 
-It starts as the screensaver. Press a key to bring the widgets in, type `test` to unlock, or wait 30 seconds and it goes
-back to the screensaver; `Ctrl+Q` closes it. *Try → Screensaver* on an open theme in the GUI and `a` in the TUI do the
+It starts as the screensaver, on every monitor. Press a key to bring the widgets in, type `test` to unlock, or wait
+30 seconds (`saver.return_after`) and it goes back to the screensaver; `Ctrl+Q` closes it. *Try → Screensaver* on an open theme in the GUI and `a` in the TUI do the
 same for that theme. To start the real one now, run `darwan saver`.
 
 ## Videos and your own backgrounds
@@ -153,6 +163,9 @@ lost. Press it again.
 
 **Two lockscreens fight.** Your shell still locks on idle. Turn its idle lock off and let hypridle do it
 ([Desktop shells](/docs/shells#the-screensaver)).
+
+**The screen turned off anyway.** Your shell or another idle daemon has its own screen-off timer, and it acts whatever
+Darwan's settings say. ⚙ → *Screensaver* and `darwan doctor` name it and say where to turn it off.
 
 **It came back straight after I opened the lid.** hypridle's `after_sleep_cmd` needs `darwan resumed`; the GUI's
 **Fix** button adds it.

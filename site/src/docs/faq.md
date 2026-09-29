@@ -7,9 +7,14 @@ Darwan shows its fallback password prompt when a theme fails to load, and if the
 ## The screensaver never starts?
 
 Run `darwan doctor`: its *Screensaver* section checks each part. hypridle has to be running and its config needs a
-`darwan saver` listener; the GUI's screensaver settings (*When you step away* on its start screen) show both and fix
-them. A video playing in a browser or a
-player keeps idle off on purpose. [Screensaver](/docs/screensaver#troubleshooting) has more.
+`darwan saver` listener; the GUI's screensaver settings (⚙ → *Screensaver*) show both and fix them. A video playing
+in a browser or a player keeps idle off on purpose. [Screensaver](/docs/screensaver#troubleshooting) has more.
+
+## My screen turns off, though Darwan's screen off is Never?
+
+Your shell or another idle daemon has a screen-off timer of its own, such as DankMaterialShell's *Turn off monitors
+after*. It acts whatever Darwan's settings say. ⚙ → *Screensaver* and `darwan doctor` name it and say where to turn it
+off; [Desktop shells](/docs/shells#their-own-idle-timers) lists where each one keeps them.
 
 ## Does the screensaver slow my machine?
 
