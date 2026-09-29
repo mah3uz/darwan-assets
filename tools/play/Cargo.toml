@@ -1,0 +1,11 @@
+[package]
+name = "darwan-play-data"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+darwan-core = { path = "../../../darwan/crates/darwan-core" }
+serde_json = "1"
+
+[workspace]

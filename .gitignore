@@ -5,3 +5,6 @@ __pycache__/
 # Recorder leftovers
 *.log
 *.mkv
+
+# The demo data tool
+tools/play/target/

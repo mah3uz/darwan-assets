@@ -121,9 +121,9 @@ The theme count and the stills on the wall are written into `tools/banner.html`;
 
 ## The website
 
-[darwan.dev](https://darwan.dev) is a Vue app in `site/`, styled with Tailwind and served by Cloudflare as a Worker with static assets. It has a landing page, a gallery of every theme, the docs and the credits.
+[darwan.dev](https://darwan.dev) is a Vue app in `site/`, styled with Tailwind and served by Cloudflare as a Worker with static assets. It has a landing page, a gallery of every theme, a playable GUI demo, the docs and the credits.
 
-Needs: [Bun](https://bun.sh), [just](https://github.com/casey/just), ImageMagick, and a darwan checkout next to this repository (`../darwan`).
+Needs: [Bun](https://bun.sh), [just](https://github.com/casey/just), ImageMagick, and a darwan checkout next to this repository (`../darwan`). `just play-data` also needs Rust.
 
 ```sh
 just dev       # hot-reloading dev server
@@ -131,11 +131,14 @@ just build     # site/dist, with the animations copied into dist/assets
 just preview   # the build, served by Cloudflare's local runtime
 just deploy    # build and publish to darwan.dev
 just og        # re-render site/public/og.png, the link-preview image
+just play-data # regenerate site/public/demo/data.json, the GUI demo's data
 ```
 
 Run `bunx wrangler login` in `site/` once before the first deploy.
 
-The build reads the themes from `../darwan/themes`: each theme's name, family, author, options and fonts come from its `darwan.toml`, and its still from `preview.jpg` (shrunk to 640 px WebP). The lock-recovery and theme-contract docs are read from `../darwan/docs`. The rest of the docs are in `site/src/docs/`, adapted from darwan's README. The wallpaper credits are in `site/src/data/credits.ts`, copied from darwan's acknowledgements. Each theme's screensaver look, `site/public/ambient/<slug>.webp`, is a real render (videos included) from `darwan preview <id> --saver --shot out.png` on a Hyprland headless output, converted with `magick out.png -quality 80`; the theme dialog shows it when the file exists. The GUI and TUI screenshots in `site/public/screens/` were taken by hand, and `saver-saver.webp` / `saver-lock.webp` are Rainy Room from `darwan preview` with and without `--saver`.
+The build reads the themes from `../darwan/themes`: each theme's name, family, author, options and fonts come from its `darwan.toml`, and its still from `preview.jpg` (shrunk to 640 px WebP). The lock-recovery and theme-contract docs are read from `../darwan/docs`. The rest of the docs are in `site/src/docs/`, adapted from darwan's README. The wallpaper credits are in `site/src/data/credits.ts`, copied from darwan's acknowledgements. Each theme's screensaver look, `site/public/ambient/<slug>.webp`, is a real render (videos included) from `darwan preview <id> --saver --shot out.png` on a Hyprland headless output, converted with `magick out.png -quality 80`; the theme dialog shows it when the file exists. The GUI screenshots in `site/public/screens/` (`gui.webp`, `gui-wall.webp`) were rendered offscreen with the demo user `traveler`, the TUI one was taken by hand, and `saver-saver.webp` / `saver-lock.webp` are Rainy Room from `darwan preview` with and without `--saver`.
+
+`/play` is the GUI, playable in the browser on desktops (1100 px and wider, with a pointer; phones get the screenshots). It is a static page in `site/public/demo/`, and its data, `data.json`, is every theme's settings as the GUI groups them, the Wall and a screensaver timeline. `just play-data` makes it by running darwan-gui's own model code (`tools/play`, built with cargo against `../darwan`), so the demo matches the app; it writes site URLs only and refuses to write a local path. Nothing runs at deploy: the file is committed and ships as it is. Run `just play-data` and commit the new `data.json` when a theme's options or the GUI's settings change.
 
 Link previews (Slack, Discord, X and so on) show the home page's title and `og.png` for every URL, because the crawlers behind them don't run the app. Search engines do, so each page sets its own title, description and canonical URL as it opens. `index.html` also carries the app's structured data, and the build writes `sitemap.xml`.
 

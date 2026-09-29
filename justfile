@@ -32,3 +32,9 @@ og:
 # Make every theme's hover loop (darwan/themes/<id>/preview.webp) from its demo; name themes to make only those
 loops *themes:
     python3 tools/loops.py {{themes}}
+
+# The GUI demo's data (site/public/demo/data.json), made by darwan-gui's own model code from the checkout beside this
+play-data:
+    cd tools/play && cargo build --release -q
+    mkdir -p site/public/demo
+    tools/play/target/release/darwan-play-data > site/public/demo/data.json

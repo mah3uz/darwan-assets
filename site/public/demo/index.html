@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Darwan GUI demo</title>
+<link rel="icon" href="/darwan.svg" type="image/svg+xml">
+<link rel="stylesheet" href="demo.css">
+<script type="module" src="demo.js"></script>
+</head>
+<body data-look="darwan">
+  <div id="wallpaper"><img alt=""></div>
+
+  <main id="wall">
+    <header class="toolbar">
+      <div class="brand"><img src="/darwan.svg" alt="">Darwan</div>
+      <label class="search"><svg class="i"><use href="#i-search"/></svg><input id="search" placeholder="Search themes" autocomplete="off"><kbd>Ctrl F</kbd></label>
+      <button class="flat health" data-act="doctor"><span class="dot"></span>All good</button>
+      <button class="flat icon" data-act="settings" id="gear" title="Settings for every theme"><svg class="i"><use href="#i-gear"/></svg></button>
+    </header>
+    <div class="scroll" id="wallScroll">
+      <div class="body">
+        <div class="eyebrow">Your gates</div>
+        <div class="gates" id="gates"></div>
+        <section class="stepaway glass" id="stepaway"></section>
+        <div class="chips" id="chips"></div>
+        <div id="sections"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="backdrop"><img alt=""></div>
+  <section id="stage">
+    <div class="top" id="stageTop">
+      <button class="pill" data-act="back"><svg class="i"><use href="#i-left"/></svg>All themes</button>
+      <div class="title"><div class="t" id="stageTitle"></div><div class="s" id="stageSub"></div></div>
+      <div class="seg glass" id="modes"></div>
+      <button class="round glass" data-act="inspector" title="Hide or show the settings (Ctrl+I)"><svg class="i"><use href="#i-sidebar"/></svg></button>
+    </div>
+    <div class="strip glass" id="strip"></div>
+    <div class="dock" id="dock">
+      <div class="bar glass">
+        <button class="pill flat" data-act="try" id="tryBtn"><svg class="i"><use href="#i-play"/></svg>Try<svg class="i small"><use href="#i-down"/></svg></button>
+        <button class="pill flat" data-act="check"><svg class="i"><use href="#i-check"/></svg>Check</button>
+        <button class="pill flat" id="compareBtn" title="Hold to see it as it ships (or hold \)"><svg class="i"><use href="#i-compare"/></svg>Compare changes</button>
+        <span class="sep"></span>
+        <button class="pill primary" data-act="use" id="useBtn">Use as…<svg class="i small"><use href="#i-down"/></svg></button>
+      </div>
+      <div class="toast glass" id="toast"><img alt=""><div class="tb"><div class="tl"></div><div class="tp"><i></i></div></div></div>
+    </div>
+  </section>
+  <div id="frame">
+    <div class="screen">
+      <img class="still" alt="">
+      <img class="live" alt="">
+      <div class="loading"><span class="spinner big"></span><div></div></div>
+      <div class="note pill-label compare">Without your changes</div>
+      <div class="note demo">Demo: a recording of the theme. In the app it's live: click it and type <b>test</b>.</div>
+    </div>
+  </div>
+
+  <aside id="inspector" class="glass">
+    <div class="head">
+      <div class="name" id="insName"></div>
+      <div class="seg stretch" id="tabs"></div>
+    </div>
+    <div class="ins-body" id="insBody"></div>
+    <div class="savebar" id="savebar"><span>Unsaved changes</span><button class="btn" data-act="discard">Discard</button><button class="btn primary" data-act="save">Save</button></div>
+  </aside>
+
+  <div class="lookswitch glass" id="look"></div>
+  <div class="wallsave glass" id="wallsave"><span>Unsaved changes</span><button class="pill" data-act="discard">Discard</button><button class="pill primary" data-act="save">Save</button></div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="M18 11a7 7 0 1 1-14 0a7 7 0 1 1 14 0M20 20l-3.5-3.5"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 11h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2zM8 11V7a4 4 0 1 1 8 0v4"/></symbol>
+    <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2zM12 10v4M12 17.5v.5"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-compare" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM12 4v16"/></symbol>
+    <symbol id="i-sidebar" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM15 4v16"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.7 9.7 0 0 0-6.7 2.7L3 8M3 3v5h5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM11 9a2 2 0 1 1-4 0a2 2 0 1 1 4 0M21 15l-5-5L5 21"/></symbol>
+    <symbol id="i-film" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 4v16M17 4v16M2 9h5M2 15h5M17 9h5M17 15h5"/></symbol>
+    <symbol id="i-colour" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 1 9-9c0 2-1.5 3-3 3h-2a2 2 0 0 0-1 3.7A1.5 1.5 0 0 1 12 21zM7.5 11.5h.01M10.5 7.5h.01M15.5 8.5h.01"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-display" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM8 20h8M12 16v4"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8M6.3 7.3a8 8 0 1 0 11.4 0"/></symbol>
+  </svg>
+</body>
+</html>

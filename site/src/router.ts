@@ -17,6 +17,7 @@ export const router = createRouter({
         ...docs.map((d) => ({ path: d.slug, component: d.page, meta: { title: d.title, description: d.description } })),
       ],
     },
+    { path: "/play", component: () => import("./pages/Play.vue"), meta: { title: "Try the GUI", description: "Darwan's GUI in your browser: the real themes and settings, a live theme for each, the screensaver timeline and both looks. Nothing touches your system." } },
     { path: "/credits", component: () => import("./pages/Credits.vue"), meta: { title: "Credits", description: "Darwan's themes come from qylock by Darkkal44. The artists behind every wallpaper and font." } },
     { path: "/:rest(.*)*", component: () => import("./pages/NotFound.vue"), meta: { title: "Page not found" } },
   ],
