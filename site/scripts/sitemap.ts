@@ -4,7 +4,7 @@ import { docs } from "../src/docs";
 import themes from "../src/data/themes.json";
 
 const site = "https://darwan.dev";
-const paths = ["/", "/themes", ...themes.map((t) => `/themes/${t.id}`), ...docs.map((d) => `/docs/${d.slug}`), "/credits"];
+const paths = ["/", "/themes", ...themes.map((t) => `/themes/${t.id}`), ...docs.map((d) => `/docs/${d.slug}`), "/releases", "/credits"];
 
 const urls = paths.map((p) => `  <url><loc>${site}${p}</loc></url>`).join("\n");
 writeFileSync(

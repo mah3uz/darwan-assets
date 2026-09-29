@@ -15,11 +15,12 @@ const names: Record<Choice, string> = { system: "System", light: "Light", dark: 
 const nextChoice = computed(() => order[(order.indexOf(choice.value) + 1) % order.length]);
 const cycle = () => (choice.value = nextChoice.value);
 
-// Play is the GUI's full window, so it is offered only where it fits.
+// Play is the GUI's full window, so it is offered only where it fits. Phones find Releases in the footer.
 const nav = [
   { to: "/themes", label: "Themes" },
   { to: "/play", label: "Play", desktop: true },
   { to: "/docs", label: "Docs" },
+  { to: "/releases", label: "Releases", wide: true },
   { to: "/credits", label: "Credits" },
 ];
 </script>
@@ -39,7 +40,7 @@ const nav = [
         :key="item.to"
         :to="item.to"
         class="text-sm text-dim transition-colors hover:text-bright"
-        :class="{ 'hidden min-[1100px]:inline': item.desktop }"
+        :class="{ 'hidden min-[1100px]:inline': item.desktop, 'hidden sm:inline': item.wide }"
         active-class="!text-bright"
       >
         {{ item.label }}

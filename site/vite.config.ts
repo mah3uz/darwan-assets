@@ -1,4 +1,4 @@
-import { createReadStream, existsSync } from "node:fs";
+import { createReadStream, existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -7,9 +7,11 @@ import Markdown from "unplugin-vue-markdown/vite";
 import anchor from "markdown-it-anchor";
 import { fromHighlighter } from "@shikijs/markdown-exit/core";
 import { createHighlighter } from "shiki";
+import { createMarkdownExit } from "markdown-exit";
 
 const animations = resolve(import.meta.dirname, "../assets");
 const darwanDocs = resolve(import.meta.dirname, "../../darwan/docs");
+const changelog = resolve(import.meta.dirname, "../../darwan/CHANGELOG.md");
 
 // Links written for GitHub (README sections, sibling docs) point at the matching page here.
 const links: Record<string, string> = {
@@ -42,6 +44,49 @@ function serveAnimations(): Plugin {
   };
 }
 
+// darwan's CHANGELOG.md, one entry per release, as `virtual:releases` for the Releases page. "Unreleased" stays out.
+function releases(): Plugin {
+  const id = "virtual:releases";
+  const md = createMarkdownExit();
+  const heading = /^(\d+\.\d+\.\d+) - (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}) ([+-]\d{2}:\d{2})$/;
+  function read() {
+    const entries = readFileSync(changelog, "utf8")
+      .split(/^## /m)
+      .slice(1)
+      .map((part) => {
+        const end = part.indexOf("\n");
+        return { title: part.slice(0, end).trim(), text: part.slice(end + 1).trim() };
+      })
+      .filter((e) => e.title !== "Unreleased")
+      .map((e) => {
+        const m = heading.exec(e.title);
+        if (!m) throw new Error(`CHANGELOG.md: "## ${e.title}" is not "## <version> - <YYYY-MM-DD HH:MM +HH:MM>"`);
+        // What people must do after upgrading gets its own box, so it's split from the rest.
+        const at = e.text.search(/^### Upgrading from/m);
+        const next = at < 0 ? -1 : e.text.slice(at + 1).search(/^### /m);
+        const upgrade = at < 0 ? "" : next < 0 ? e.text.slice(at) : e.text.slice(at, at + 1 + next);
+        const notes = at < 0 ? e.text : e.text.replace(upgrade, "");
+        const [upgradeTitle, ...upgradeText] = upgrade.split("\n");
+        return {
+          version: m[1],
+          published: `${m[2]}T${m[3]}:00${m[4]}`,
+          notes: md.render(notes.trim()),
+          upgrade: upgrade ? { title: upgradeTitle.replace(/^### /, ""), html: md.render(upgradeText.join("\n").trim()) } : null,
+        };
+      });
+    return entries.map((e, i) => ({ ...e, previous: entries[i + 1]?.version ?? null }));
+  }
+  return {
+    name: "releases",
+    resolveId: (source) => (source === id ? `\0${id}` : undefined),
+    load(source) {
+      if (source !== `\0${id}`) return;
+      this.addWatchFile(changelog);
+      return `export default ${JSON.stringify(read())};`;
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     vue({ include: [/\.vue$/, /\.md$/], template: { transformAssetUrls: { includeAbsolute: false } } }),
@@ -64,6 +109,7 @@ export default defineConfig({
     }),
     tailwindcss(),
     serveAnimations(),
+    releases(),
   ],
   resolve: { alias: { "@darwan-docs": darwanDocs } },
   server: { fs: { allow: [import.meta.dirname, darwanDocs] } },

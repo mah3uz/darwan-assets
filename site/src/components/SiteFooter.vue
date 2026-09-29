@@ -10,6 +10,7 @@
         </p>
       </div>
       <div class="flex gap-5">
+        <RouterLink class="hover:text-bright" to="/releases">Releases</RouterLink>
         <a class="hover:text-bright" href="https://github.com/mah3uz/darwan">GitHub</a>
         <a class="hover:text-bright" href="https://aur.archlinux.org/packages/darwan-bin">AUR</a>
         <a class="hover:text-bright" href="https://github.com/mah3uz/darwan/issues">Issues</a>

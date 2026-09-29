@@ -18,6 +18,7 @@ export const router = createRouter({
       ],
     },
     { path: "/play", component: () => import("./pages/Play.vue"), meta: { title: "Try the GUI", description: "Darwan's GUI in your browser: the real themes and settings, a live theme for each, the screensaver timeline and both looks. Nothing touches your system." } },
+    { path: "/releases", component: () => import("./pages/Releases.vue"), meta: { title: "Releases", description: "Every Darwan release, newest first: what changed in each version, and anything to do after you upgrade." } },
     { path: "/credits", component: () => import("./pages/Credits.vue"), meta: { title: "Credits", description: "Darwan's themes come from qylock by Darkkal44. The artists behind every wallpaper and font." } },
     { path: "/:rest(.*)*", component: () => import("./pages/NotFound.vue"), meta: { title: "Page not found" } },
   ],
