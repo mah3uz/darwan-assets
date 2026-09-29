@@ -108,7 +108,7 @@ body[data-look="darwan"] #wallpaper { display: block; }
 #wall { position: fixed; inset: 0; display: flex; flex-direction: column; transition: opacity 300ms; }
 body.staged.settled #wall { visibility: hidden; }
 .toolbar { height: 56px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 20px 0 56px; background: var(--chrome); border-bottom: 1px solid var(--sep); backdrop-filter: blur(24px); }
-.brand { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; margin-right: auto; }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; margin-right: auto; color: inherit; text-decoration: none; }
 .brand img { width: 26px; height: 26px; }
 .search { display: flex; align-items: center; gap: 8px; width: 280px; height: 30px; padding: 0 10px; border-radius: 8px; background: var(--control); color: var(--sub); }
 .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--text); }

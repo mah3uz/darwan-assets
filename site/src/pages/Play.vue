@@ -10,7 +10,14 @@ onBeforeUnmount(() => query.removeEventListener("change", update));
 </script>
 
 <template>
-  <div class="mx-auto max-w-[1600px] px-4 pt-10 sm:px-6">
+  <iframe
+    v-if="desktop"
+    src="/demo/index.html"
+    title="The Darwan GUI, playable"
+    class="block h-dvh w-full border-0"
+  />
+
+  <div v-else class="mx-auto max-w-[1600px] px-4 pt-10 sm:px-6">
     <h1 class="text-4xl font-semibold tracking-tight text-bright">Try the GUI</h1>
     <p class="mt-3 max-w-[80ch] leading-relaxed text-dim">
       Darwan's GUI, here in your browser with the real themes and their settings. Hover a card to watch it unlock, open
@@ -18,15 +25,7 @@ onBeforeUnmount(() => query.removeEventListener("change", update));
       buttons that would lock, apply or save only say what they'd do: nothing touches your system.
     </p>
 
-    <div
-      v-if="desktop"
-      class="mt-6 overflow-hidden rounded-2xl bg-night shadow-2xl ring-1 ring-line"
-      style="height: min(920px, calc(100vh - 13rem)); min-height: 640px"
-    >
-      <iframe src="/demo/" title="The Darwan GUI, playable" class="size-full border-0" />
-    </div>
-
-    <div v-else class="mt-6 space-y-4">
+    <div class="mt-6 space-y-4">
       <p class="rounded-xl bg-surface p-4 text-ink ring-1 ring-line">
         The demo is the GUI's full window, so it needs a desktop screen. Here is what it looks like:
       </p>
