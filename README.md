@@ -76,7 +76,8 @@ tools/record.py --quality 80 ...    # WebP quality, default 75
 hyprctl output remove darwan-test
 ```
 
-`record.py` refuses to start without the `darwan-test` output. It captures from the moment the demo starts until the theme unlocks, and reports each theme's frame count, dropped frames and whether it unlocked.
+Only create or remove the output while your session is unlocked: adding one under a running lockscreen has hung
+Hyprland. `record.py` refuses to start without the `darwan-test` output. It captures from the moment the demo starts until the theme unlocks, and reports each theme's frame count, dropped frames and whether it unlocked.
 
 | File | Does |
 |:---|:---|
@@ -84,6 +85,23 @@ hyprctl output remove darwan-test
 | `tools/demo.sh` | runs one theme's demo under Quickshell with darwan's runtime |
 | `tools/shell/demo_shell.qml` | the demo: loads the theme through darwan's `ThemeHost`, draws the cursor, clicks and types |
 | `tools/shell/ThemeHost.qml`, `FallbackPrompt.qml`, `contract` | links into `../darwan/runtime` (Quickshell only loads QML from its own folder) |
+
+## Hover loops
+
+The GUI plays a short loop of each theme while you hover its card. `tools/loops.py` makes them from the demos here and
+writes them into darwan, next to each theme's still:
+
+```sh
+just loops                    # every theme: ../darwan/themes/<id>/preview.webp
+just loops pixel-coffee osu   # some themes
+```
+
+Each is the demo at 640×360 and 12.5 fps, about 80–600 KB, 12 MB for all 40. Run it after re-recording a demo, then
+commit the new `preview.webp` in darwan. It needs Pillow (`sudo pacman -S python-pillow`).
+
+| Tool | Does |
+|:-----|:-----|
+| `tools/loops.py` | shrinks each demo into its theme's hover loop in the darwan checkout beside this one |
 
 ## The banner
 

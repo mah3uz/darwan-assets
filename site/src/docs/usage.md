@@ -47,13 +47,23 @@ Run `darwan` in a terminal. Themes are grouped into Clockwork, Pixel and Other t
 
 ## GUI
 
-Run `darwan-gui`, or open *Darwan* from your launcher. On the left is the theme gallery with search; in the centre, a live preview that shows every change at once (click it and type `test` to unlock); on the right, the theme's settings and [customisations](/docs/customise). Changes stay unsaved until you press *Save* (`Ctrl+S`); *Discard* goes back. With unsaved changes, switching themes, closing the window (including your compositor's close keybind) or running a command asks you to save or discard first. Drop an image or video on the preview to use it as the background. A colour opens a picker: the theme's own, generated from the background, or your own from a colour wheel, a pasted code or swatches. *Reset theme* puts every setting of the theme back to its default, unsaved until you press *Save*.
+Run `darwan-gui`, or open *Darwan* from your launcher.
 
-Below the preview: *Use for lock*, *Lock now*, *Full-screen preview*, *Screensaver preview*, *Apply to SDDM*, *SDDM test mode* and *Check*, plus *Import…* for missing fonts. At the top right, *Screensaver* opens the [screensaver](/docs/screensaver) window, which sets up hypridle and holds the screensaver's settings, and *Doctor* checks your system. The *Lockscreen* / *Login screen layout* switch shows the theme as each host would.
+![The start screen: your lockscreen and login screen at the top, what happens when you step away, and every theme as a card.](/screens/gui-wall.webp)
+
+**The start screen** shows your two gates, the lockscreen and the login screen, with *Lock now*, *Test* and *Customise*. Under them, *When you step away* sums up the [screensaver](/docs/screensaver) and opens into its settings. Then every theme as a card: hover one, or move to it with the arrow keys, to watch it unlock. The chips filter by family, video backgrounds, themes that bring their own font, or the ones in use; `Ctrl+F` searches. **Doctor** at the top turns amber when something needs a look, and runs the full check when clicked.
+
+![A theme open: the live theme fills the window, with its settings beside it.](/screens/gui.webp)
+
+**Open a theme** and it fills the window, live: click it and type `test` to unlock. `←` `→` step through the themes (or hover near the bottom for a strip of them), *Lockscreen* / *Login screen* shows it as each host would, and the bars step aside while you look. At the bottom: *Try* (full screen, the screensaver, SDDM's own greeter, or lock now), *Check*, *Compare changes* once you've changed it (hold it, or `\`, to see it as it ships) and *Use as…*, which puts it on the lockscreen, the login screen or both. `Esc` goes back to the start screen. A theme you've opened before comes back at once.
+
+**The settings** sit beside it (`Ctrl+I` hides them): *This theme* for its background, look, colours, fonts, motion and [customisations](/docs/customise), *All themes* for the clock and date. The preview shows every change at once; nothing is written until *Save* (`Ctrl+S`), and *Discard* goes back. Closing the window or running a command with unsaved changes asks you to save or discard first. Drop an image or video on the preview to use it as the background. A colour opens a picker: the theme's own, generated from the background, or your own from a colour wheel, a pasted code or swatches. *Reset* in the ⋯ menu puts every setting of the theme back to its default, unsaved until you press *Save*.
+
+**The look** switch on the window's left edge picks Darwan's own look or your system's Qt theme (`gui.look`), saved as you pick. **⚙** holds the clock and date and the screensaver.
 
 ## Lockscreen keybind
 
-*Use for lock* only chooses the theme. To lock with Darwan, point your lock keybind and idle locker at `darwan lock`, and let a new locker take over if one ever crashes. Using DankMaterialShell, Noctalia, Caelestia, illogical-impulse or Omarchy? They have a lockscreen of their own; [Desktop shells](/docs/shells) shows how to hand it to Darwan. In Hyprland's Lua config:
+*Use as… → Lockscreen* only chooses the theme. To lock with Darwan, point your lock keybind and idle locker at `darwan lock`, and let a new locker take over if one ever crashes. Using DankMaterialShell, Noctalia, Caelestia, illogical-impulse or Omarchy? They have a lockscreen of their own; [Desktop shells](/docs/shells) shows how to hand it to Darwan. In Hyprland's Lua config:
 
 ```lua
 hl.config({ misc = { allow_session_lock_restore = true } })
@@ -85,8 +95,8 @@ listener {
 }
 ```
 
-The listener starts the [screensaver](/docs/screensaver) after five minutes idle, and the GUI's Screensaver window
-writes all of this for you.
+The listener starts the [screensaver](/docs/screensaver) after five minutes idle, and the GUI's screensaver settings
+write all of this for you.
 
 `inhibit_sleep = 3` matters: hypridle's default waits for the lock only when the command is hyprlock, so without it the machine can go to sleep before Darwan's lock is on screen. `darwan doctor` checks this.
 

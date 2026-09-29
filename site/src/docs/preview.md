@@ -4,7 +4,7 @@ You never have to lock your real session to try a theme.
 
 | Mode | How | Password | Good for |
 |:--|:--|:--|:--|
-| **Live preview** | GUI centre pane | `test` | tweaking settings and customisations, and seeing each change before you save it |
+| **Live preview** | GUI, an open theme | `test` | tweaking settings and customisations, and seeing each change before you save it |
 | **Full-screen preview** | `darwan preview <theme>` | `test`, or your real one with `--pam` | the exact lockscreen runtime, without locking; `Ctrl+Q` closes it |
 | **Screensaver preview** | `darwan preview <theme> --saver` | `test` | the [screensaver](/docs/screensaver): a key brings the widgets in, and 30 seconds without input takes it back |
 | **SDDM preview** | `darwan sddm preview <theme>` | none (visual only) | how it looks in SDDM's own greeter before applying |

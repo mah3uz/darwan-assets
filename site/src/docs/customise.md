@@ -6,10 +6,11 @@ does `darwan show <theme>`. Settings are per theme, so changing Rainy Room never
 
 ## Try it live
 
-The GUI is the easiest way. Change anything on the right and the live preview shows it at once; nothing is written
-until you press **Save** (`Ctrl+S`), and **Discard** goes back to what you had. Drop an image or a video on the preview
-to make it the background. If you switch themes, close the window or run a command with unsaved changes, the GUI asks
-first. **Reset theme** puts every setting of the theme back to its default, in the same unsaved way.
+The GUI is the easiest way. Open a theme and change anything in the settings beside it: the live preview shows it at
+once, nothing is written until you press **Save** (`Ctrl+S`), and **Discard** goes back to what you had. Hold
+**Compare changes** to see the theme as it ships. Drop an image or a video on the preview to make it the background.
+If you close the window or run a command with unsaved changes, the GUI asks first. **Reset** in the ⋯ menu puts every
+setting of the theme back to its default, in the same unsaved way.
 
 A colour opens a picker with three choices: the theme's own, generated from the background, or a custom one from a
 colour wheel, a pasted code, or swatches of the colours your background gives. Each choice shows in the preview at once;

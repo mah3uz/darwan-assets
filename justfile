@@ -28,3 +28,7 @@ og:
       --force-device-scale-factor=1 --window-size=1200,630 --virtual-time-budget=8000 \
       --screenshot={{site}}/public/og.png "file://{{justfile_directory()}}/tools/banner.html?og"
     pngquant --quality 80-95 --speed 1 --force --ext .png {{site}}/public/og.png
+
+# Make every theme's hover loop (darwan/themes/<id>/preview.webp) from its demo; name themes to make only those
+loops *themes:
+    python3 tools/loops.py {{themes}}

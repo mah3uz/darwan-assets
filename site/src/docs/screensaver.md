@@ -24,7 +24,9 @@ appears, or `never` for a screensaver that never locks.
 ## Turn it on
 
 The screensaver starts from **hypridle**, Hyprland's idle daemon. The quickest way is the GUI: open *Darwan*, click
-**Screensaver** at the top right, and follow what it says.
+*When you step away* on the start screen (or ⚙ → *Screensaver*), and follow what it says. It shows the idle,
+lock, screen-off and suspend times as one timeline: click a point to change it. Changes are saved with *Save*, like
+every other setting.
 
 1. **hypridle missing?** It shows the command to install it:
 
@@ -50,8 +52,8 @@ The screensaver starts from **hypridle**, Hyprland's idle daemon. The quickest w
    or `exec-once = hypridle` in a classic `hyprland.conf`.
 
 3. **No hypridle config?** **Enable the screensaver** writes `~/.config/hypr/hypridle.conf` for you. If you have one
-   already, the window changes it in place, keeps your own lines and comments, and restarts hypridle so each change
-   applies.
+   already, the GUI changes it in place when you save, keeps your own lines and comments, and restarts hypridle so
+   the change applies.
 
 4. **Turn your shell's own idle lock off**, if it has one ([Desktop shells](/docs/shells#the-screensaver)), or both
    answer when you go idle.
@@ -97,7 +99,7 @@ and start it again.
 
 ## Settings
 
-Both are in the GUI's Screensaver window, and in `~/.config/darwan/config.toml`:
+Both are in the GUI's screensaver settings, and in `~/.config/darwan/config.toml`:
 
 ```toml
 [saver]
@@ -127,8 +129,8 @@ darwan preview pixel-rainyroom --saver
 ```
 
 It starts as the screensaver. Press a key to bring the widgets in, type `test` to unlock, or wait 30 seconds and it goes
-back to the screensaver; `Ctrl+Q` closes it. The GUI's **Screensaver preview** button and `a` in the TUI do the same for
-the selected theme. To start the real one now, run `darwan saver`.
+back to the screensaver; `Ctrl+Q` closes it. *Try → Screensaver* on an open theme in the GUI and `a` in the TUI do the
+same for that theme. To start the real one now, run `darwan saver`.
 
 ## Videos and your own backgrounds
 
@@ -142,7 +144,7 @@ and no drawing until you come back.
 
 ## Troubleshooting
 
-**It never starts.** Run `darwan doctor`. hypridle has to be running (the GUI's Screensaver window says whether it
+**It never starts.** Run `darwan doctor`. hypridle has to be running (the GUI's screensaver settings say whether it
 is), and its config needs the `darwan saver` listener. Video playing in a browser or a player keeps idle off on purpose,
 and hypridle respects that.
 

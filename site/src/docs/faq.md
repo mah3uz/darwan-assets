@@ -7,7 +7,8 @@ Darwan shows its fallback password prompt when a theme fails to load, and if the
 ## The screensaver never starts?
 
 Run `darwan doctor`: its *Screensaver* section checks each part. hypridle has to be running and its config needs a
-`darwan saver` listener; the GUI's **Screensaver** window shows both and fixes them. A video playing in a browser or a
+`darwan saver` listener; the GUI's screensaver settings (*When you step away* on its start screen) show both and fix
+them. A video playing in a browser or a
 player keeps idle off on purpose. [Screensaver](/docs/screensaver#troubleshooting) has more.
 
 ## Does the screensaver slow my machine?

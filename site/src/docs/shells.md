@@ -251,8 +251,8 @@ whatever the idle listeners and keybinds called before (often `hyprlock`) with `
 
 Darwan's [screensaver](/docs/screensaver) starts from a hypridle listener that runs `darwan saver`, so hypridle has to
 own idle: turn the shell's own idle lock off, and let the listener start the screensaver, which locks after its grace
-period (`saver.lock_after`). The GUI's **Screensaver** window writes the listener; with a shell that already locks for
-you, turn its *Lock with darwan* and *Lock before sleep* switches off there, so only one program answers each lock.
+period (`saver.lock_after`). The GUI's screensaver settings write the listener; with a shell that already locks for
+you, turn their *Lock with Darwan* and *Lock before sleep* switches off, so only one program answers each lock.
 
 | Shell | For the screensaver |
 |:--|:--|

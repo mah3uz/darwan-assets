@@ -20,6 +20,9 @@ format = "ddd, MMM d"   # one of the presets below; unset, each theme keeps its 
 lock_after = 10         # seconds from the screensaver to the lock; 0 locks at once, "never" never locks
 quality = "full"        # "full" | "auto" | "eco" | "still"
 
+[gui]
+look = "darwan"         # "darwan" | "system" to follow your Qt theme's colours and font
+
 [themes."clockwork/orbital"]
 variant = "light"       # a customisation, see below
 enableWindup = false    # one of Orbital's own options
@@ -48,6 +51,11 @@ The clock settings reach the 38 themes that show a clock and the date setting th
 `saver.lock_after` is the grace period before the screensaver locks (10 seconds), and `saver.quality` what its videos
 play: `full` as shipped, `auto` chosen from your hardware and power, `eco` smaller copies, `still` a still frame.
 [Screensaver](/docs/screensaver) explains both; they apply to every theme.
+
+## The GUI's look
+
+`gui.look` is the GUI's own look: `darwan`, its greys and blue with frosted glass over a blurred theme, or `system` to
+follow your Qt theme's colours and font. The switch on the GUI's left edge sets it.
 
 ## Per-theme options
 

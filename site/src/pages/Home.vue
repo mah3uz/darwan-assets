@@ -13,7 +13,7 @@ const faces = [
     id: "gui",
     label: "GUI",
     command: "darwan-gui",
-    text: "A gallery on the left, a live preview in the middle that shows every change before you save it, and the theme's settings and customisations on the right. Drop an image or a video on the preview to make it the background, and set up the screensaver and hypridle from its Screensaver window.",
+    text: "Every theme as a card that plays its unlock when you hover it. Open one and it fills the window, live, with its settings beside it and every change shown before you save it. Drop an image or a video on it to make it the background, and set up the screensaver and hypridle from the start screen.",
   },
   {
     id: "tui",
@@ -50,7 +50,7 @@ const saverView = ref<(typeof saverViews)[number]["value"]>("saver");
 const features = [
   { title: "A screensaver in every theme", text: "When you step away, your lock theme fades in with only its background and its animation. After a grace period you choose, it becomes the lock without a flicker." },
   { title: "Type straight away", text: "The first key you press on the screensaver brings the lock back and lands in the password field. With several monitors, what you type shows on every one." },
-  { title: "Idle, set up for you", text: "The GUI's Screensaver window tells you whether hypridle is installed and running, writes its config, and sets the idle, screen-off and suspend times." },
+  { title: "Idle, set up for you", text: "The GUI tells you whether hypridle is installed and running, writes its config, and shows the idle, lock, screen-off and suspend times as one timeline." },
   { title: "Light on your machine", text: "Nothing runs while you work. Videos play through libmpv on your graphics card, with smaller copies or still frames if you want them, and stop while the screens are off." },
   { title: "Make it yours", text: "Your own image, GIF, video or desktop wallpaper behind a theme, colours picked or generated from it the way Material You does, your fonts, and your animation speed." },
   { title: "Light and dark", text: "Seven themes have a second look designed for them, not filtered from them, and can follow your desktop's light or dark mode." },
@@ -181,7 +181,7 @@ const features = [
             prompt, never the screensaver, and a locked screensaver unloads its theme while the screens are off.
           </li>
           <li>
-            <span class="text-bright">Set up in one window.</span> The GUI installs and starts hypridle with you, writes
+            <span class="text-bright">Set up from the start screen.</span> The GUI installs and starts hypridle with you, writes
             its config, and picks how much video your machine plays.
           </li>
         </ul>
@@ -255,7 +255,7 @@ const features = [
           <img
             v-if="f.id !== 'cli'"
             :src="`/screens/${f.id}.webp`"
-            :alt="f.id === 'gui' ? 'The Darwan GUI: theme gallery, live preview and settings.' : 'The Darwan TUI in a terminal, with a theme preview.'"
+            :alt="f.id === 'gui' ? 'The Darwan GUI: a theme open full-window and live, with its settings beside it.' : 'The Darwan TUI in a terminal, with a theme preview.'"
             width="1910"
             height="1070"
             loading="lazy"
