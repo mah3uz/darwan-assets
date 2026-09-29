@@ -21,8 +21,9 @@ onBeforeUnmount(() => query.removeEventListener("change", update));
     <h1 class="text-4xl font-semibold tracking-tight text-bright">Try the GUI</h1>
     <p class="mt-3 max-w-[80ch] leading-relaxed text-dim">
       Darwan's GUI, here in your browser with the real themes and their settings. Hover a card to watch it unlock, open
-      one, change its settings, try the screensaver timeline. The live theme is played by its recorded demo, and the
-      buttons that would lock, apply or save only say what they'd do: nothing touches your system.
+      one, change its settings, try the screensaver timeline, browse the Wallpapers pages. The live theme is played by
+      its recorded demo, the wallpapers are free ones from Wikimedia Commons and NASA, and the buttons that would lock,
+      apply, set or save only say what they'd do: nothing touches your system.
     </p>
 
     <div class="mt-6 space-y-4">

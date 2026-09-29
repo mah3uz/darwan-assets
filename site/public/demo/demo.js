@@ -1,5 +1,7 @@
 // darwan.dev's GUI demo: the Darwan GUI's screens, driven by data.json (made by darwan-gui's own model code, `just
 // play-data`). The live theme is played by its recorded demo; nothing here touches anyone's system.
+import { walls } from "./walls.js";
+
 const D = await (await fetch("data.json")).json();
 
 const $ = (s, root = document) => root.querySelector(s);
@@ -13,6 +15,8 @@ const byId = Object.fromEntries(cards.map((c) => [c.id, c]));
 const saverMarks = Object.fromEntries(D.saver.timeline.markers.map((m) => [m.id, m.choices]));
 const S = {
   look: "darwan",
+  page: "themes",
+  gate: "lock",
   filter: "all",
   query: "",
   order: cards.map((c) => c.id),
@@ -22,8 +26,7 @@ const S = {
   tab: "theme",
   draft: {},
   gates: { lock: D.wall.gates.lock.id, sddm: D.wall.gates.sddm.id },
-  stepOpen: false,
-  saver: { saver: 300, lock: "10", screenOff: 600, suspend: 0, lockBeforeSleep: true, lockWithDarwan: true, quality: D.saver.quality },
+  saver: { saver: 300, lock: "10", screenOff: 600, suspend: 0, lockBeforeSleep: true, lockWithDarwan: true, quality: D.saver.quality, returnAfter: "30", screenOffLocked: "300" },
   closed: [],
   seen: new Set(),
   keyboard: false,
@@ -80,17 +83,17 @@ function timeline() {
   marks.forEach((m, i) => { m.x = 0.2 + (marks.length > 1 ? (0.66 * i) / (marks.length - 1) : 0); m.never = m.at === null; m.warn = clash && m.id === "saver"; });
   const s = marks.find((m) => m.id === "saver"), l = marks.find((m) => m.id === "lock");
   const open = s && l && l.x > s.x ? [s.x, l.x] : null;
-  const note = clash ? ["The screen turns off before the screensaver would start, so you'll never see it.", true]
+  const note = clash ? ["The screen goes off before the screensaver starts.", true]
     : !v.saver ? [`No screensaver: the screen just turns off${v.screenOff ? ` after ${span(v.screenOff)}` : " never"}.`, false]
-    : v.lock === "never" ? ["It never locks by itself: until you lock it, any key goes back to the desktop without a password.", true]
+    : v.lock === "never" ? ["Never locks by itself: any key returns to the desktop.", true]
     : v.lock === "0" ? ["It locks as soon as it starts.", false]
-    : [`For the first ${span(+v.lock)} (the amber stretch), any key goes back to the desktop without a password.`, false];
+    : [`For the first ${span(+v.lock)} (amber), any key returns to the desktop.`, false];
   return { marks, open, note };
 }
 function summary() {
   const v = S.saver;
   const parts = [v.saver ? `screensaver after ${span(v.saver)}, ${v.lock === "never" ? "never locks by itself" : v.lock === "0" ? "locks at once" : `locks ${span(+v.lock)} later`}` : "no screensaver"];
-  parts.push(v.screenOff ? `screen off after ${span(v.screenOff)}` : "screen stays on");
+  parts.push(v.screenOff ? `screen off after ${span(v.screenOff)}` : v.screenOffLocked !== "never" ? `screen off ${span(+v.screenOffLocked)} after locking` : "screen stays on");
   parts.push(v.suspend ? `suspends after ${span(v.suspend)}` : "never suspends");
   return parts.join(" · ");
 }
@@ -102,23 +105,29 @@ function saverPanel(wide) {
     <div class="tl-head"><span>When you step away</span><span class="sp"></span><label>Screensaver</label><button class="switch ${S.saver.saver ? "on" : ""}" data-saver-toggle="saver"></button></div>
     <div class="tl-box"><div class="timeline">
       <span class="tl-track"></span>
-      ${t.open ? `<span class="tl-open" style="left:${t.open[0] * 100}%;width:${(t.open[1] - t.open[0]) * 100}%" title="Until it locks, a key goes back to the desktop without a password"></span>` : ""}
+      ${t.open ? `<span class="tl-open" style="left:${t.open[0] * 100}%;width:${(t.open[1] - t.open[0]) * 100}%" title="Until it locks, any key returns to the desktop"></span>` : ""}
       <span class="tl-start"><i></i>Idle</span>
       ${t.marks.map((m) => `<button class="mk ${m.never ? "never" : ""} ${m.warn ? "warn" : ""}" data-mark="${m.id}" style="left:${m.x * 100}%"><span class="d">${icon(m.icon)}</span><span class="v">${esc(m.value)}</span><span class="n">${m.name}</span></button>`).join("")}
     </div><div class="tl-note ${t.note[1] ? "warn" : ""}">${esc(t.note[0])}</div></div>
     <div class="cols">
       <div class="group"><div class="group-head">When the machine sleeps</div><div class="box">
-        <div class="row"><span class="label">Lock before sleep<small>Waking shows the password prompt, never the screensaver or your desktop</small></span><button class="switch ${S.saver.lockBeforeSleep ? "on" : ""}" data-saver-toggle="lockBeforeSleep"></button></div>
-        <div class="row"><span class="label">Lock with Darwan<small>loginctl lock-session and power menus show your Darwan theme</small></span><button class="switch ${S.saver.lockWithDarwan ? "on" : ""}" data-saver-toggle="lockWithDarwan"></button></div>
+        <div class="row"><span class="label">Lock before sleep<small>Waking shows the password prompt</small></span><button class="switch ${S.saver.lockBeforeSleep ? "on" : ""}" data-saver-toggle="lockBeforeSleep"></button></div>
+        <div class="row"><span class="label">Lock with Darwan<small>Power menus and loginctl lock with your theme</small></span><button class="switch ${S.saver.lockWithDarwan ? "on" : ""}" data-saver-toggle="lockWithDarwan"></button></div>
+      </div></div>
+      <div class="group"><div class="group-head">When you lock</div><div class="box">
+        <div class="row"><span class="label">Screensaver comes back<small>When left untouched, nothing typed</small></span>${saverMenu("returnAfter", D.saver.returnAfters)}</div>
+        <div class="row"><span class="label">Screen turns off<small>From the lock or last touch; any input wakes it</small></span>${saverMenu("screenOffLocked", D.saver.screenOffLockeds)}</div>
       </div></div>
       <div class="group"><div class="group-head">Video</div>
         <div class="seg stretch" data-seg="quality">${segButtons(D.saver.qualities, S.saver.quality)}</div>
         <div class="notes" title="${esc(q.long)}">${esc(D.saver.qualityLine && S.saver.quality === D.saver.quality ? D.saver.qualityLine : q.long)}</div>
       </div>
     </div>
-    <div class="foot">Saved to ~/.config/hypr/hypridle.conf when you save, and hypridle restarts to pick it up.</div>
+    <div class="foot">Saved to ~/.config/hypr/hypridle.conf; hypridle restarts to apply it.</div>
   </div>`;
 }
+
+const saverMenu = (key, choices) => `<select class="menu" data-saver-select="${key}">${choices.map((c) => `<option value="${esc(c.value)}" ${c.value === S.saver[key] ? "selected" : ""}>${esc(c.label)}</option>`).join("")}</select>`;
 
 /* ─── Shared bits ─── */
 const segButtons = (options, current) => `<span class="knob"></span>` + options.map((o) => `<button data-value="${esc(o.value)}" class="${o.value === current ? "on" : ""}">${esc(o.label)}${o.badge ? `<span class="badge">${o.badge}</span>` : ""}</button>`).join("");
@@ -197,19 +206,19 @@ const chipKeep = {
 };
 const keeps = (c) => (S.filter.startsWith("family:") ? c.family === S.filter.slice(7) : chipKeep[S.filter](c)) && (S.query === "" || c.title.toLowerCase().includes(S.query) || c.id.includes(S.query));
 function renderWall() {
+  const g = byId[S.gates[S.gate]], [, kindText] = kindOf(g.background);
   const gate = (kind) => {
     const c = byId[S.gates[kind]];
-    return `<div class="gate" data-hover-loop="${c.loop}">
-      <img src="${c.still}" alt="">
-      <div class="info"><div class="l"><div class="eyebrow">${icon(kind === "lock" ? "lock" : "login", "small")}${kind === "lock" ? "Lockscreen" : "Login screen"}</div><h2>${esc(c.title)}</h2></div>
-        <button class="pill" data-act="${kind === "lock" ? "lock-now" : "sddm-test"}">${kind === "lock" ? "Lock now" : "Test"}</button>
-        <button class="pill primary" data-open="${c.id}">Customise</button></div></div>`;
+    return `<div class="gate ${S.gate === kind ? "on" : ""}" data-gate-pick="${kind}" data-hover-loop="${c.loop}">
+      <div class="pic thumb"><img src="${c.still}" alt=""></div>
+      <div class="label">${icon(kind === "lock" ? "lock" : "login", "small")}${kind === "lock" ? "Lockscreen" : "Login screen"}  ·  ${esc(c.name)}</div></div>`;
   };
-  $("#gates").innerHTML = gate("lock") + gate("sddm");
-  const step = $("#stepaway");
-  step.classList.toggle("open", S.stepOpen);
-  step.innerHTML = `<button class="line" data-act="step">${icon("moon")}<b>When you step away</b><span class="sum">${esc(summary())}</span><span class="act">${S.stepOpen ? "Done" : "Change…"}</span></button>
-    <div class="panel"><div><div class="inner">${saverPanel(true)}</div></div></div>`;
+  $("#hero").innerHTML = `<div class="kicker">${icon(S.gate === "lock" ? "lock" : "login", "small")}${S.gate === "lock" ? "Your lockscreen" : "Your login screen"}</div>
+    <h1>${esc(g.name)}</h1>
+    <div class="facts">${kindText} background${D.themes[g.id].fonts.length ? "    Brings its own font" : ""}</div>
+    <div class="acts"><button class="pill primary" data-open="${g.id}" data-from-gate>Customise</button><button class="pill" data-act="${S.gate === "lock" ? "lock-now" : "sddm-test"}">${S.gate === "lock" ? "Lock now" : "Test"}</button></div>
+    <div class="gates">${gate("lock")}${gate("sddm")}</div>`;
+  feature();
   const families = D.wall.sections.map((s) => s.title);
   const chips = [["all", "All"], ...families.map((f) => [`family:${f}`, f]), ["video", "Video backgrounds"], ["fonts", "Brings its own font"], ["inuse", "In use"]];
   const count = (key) => cards.filter((c) => (key.startsWith("family:") ? c.family === key.slice(7) : chipKeep[key](c))).length;
@@ -222,8 +231,23 @@ function renderWall() {
       if (!list.length) return "";
       return `<div class="family"><h3>${esc(s.title)}</h3><span>${list.length}</span></div><div class="grid">${list.map(card).join("")}</div>`;
     }).join("");
-  placeKnobs($("#stepaway"));
 }
+// The featured gate's theme behind the hero, crossfading when the other gate is picked.
+function feature() {
+  const src = byId[S.gates[S.gate]].still, w = $("#wallpaper");
+  const a = w.querySelector("img.a"), b = w.querySelector("img.b");
+  const shown = w.classList.contains("flip") ? b : a, next = shown === a ? b : a;
+  w.querySelector(".blurred img").src = src;
+  if (shown.getAttribute("src") === src) return;
+  if (!shown.getAttribute("src")) { shown.src = src; return; }
+  next.onload = () => w.classList.toggle("flip", next === b);
+  next.src = src;
+}
+function depth() {
+  const hero = $("#hero"), d = Math.min(1, Math.max(0, $("#wallScroll").scrollTop / Math.max(1, hero.offsetTop + hero.offsetHeight - 56)));
+  document.body.style.setProperty("--depth", d.toFixed(3));
+}
+$("#wallScroll").addEventListener("scroll", depth, { passive: true });
 function card(c) {
   const [kindIcon, kindText] = kindOf(c.background);
   const marks = (c.id === S.gates.lock ? `<span class="mark" style="color:var(--lock)" title="Your lockscreen">${icon("lock")}</span>` : "")
@@ -402,26 +426,33 @@ function renderAll() {
 function fillSettings(el) {
   const fields = allFields(S.gates.lock);
   el.innerHTML = `<div class="h"><b>Settings</b><div class="seg stretch" data-seg="settab">${segButtons([{ value: "general", label: "General", badge: globalChanges() }, { value: "saver", label: "Screensaver" }], S.settab)}</div></div>
-    <div class="b">${S.settab === "general" ? group("Clock and date", D.themes[S.gates.lock].globals.fields, fields, [clockNote], false) : saverPanel(false)}</div>`;
+    <div class="b">${S.settab === "general" ? appearance() + group("Clock and date", D.themes[S.gates.lock].globals.fields, fields, [clockNote], false) : saverPanel(false)}</div>`;
   placeKnobs(el);
 }
 
-/* ─── Look switch ─── */
-function renderLook() {
-  document.body.dataset.look = S.look;
-  $("#look").innerHTML = `<span class="knob" style="top:${S.look === "darwan" ? 4 : 34}px"></span>
-    <button class="${S.look === "darwan" ? "on" : ""}" data-look-choice="darwan" title="Darwan’s own look${S.look === "darwan" ? " · in use" : ""}"><img src="/darwan.svg" alt=""></button>
-    <button class="${S.look === "system" ? "on" : ""}" data-look-choice="system" title="Your system’s Qt theme${S.look === "system" ? " · in use" : ""}">${icon("display")}</button>`;
-  requestAnimationFrame(() => placeKnobs());
+/* ─── Pages and the look ─── */
+const appearance = () => `<div class="group"><div class="group-head">Appearance</div><div class="box"><div class="row"><span class="label">Look<small>${S.look === "darwan" ? "Darwan's greys and blue, see-through panels" : "Your Qt theme's colours and font"}</small></span><div class="seg small" data-seg="look">${segButtons([{ value: "darwan", label: "Darwan" }, { value: "system", label: "System" }], S.look)}</div></div></div></div>`;
+const Walls = walls({ D, $, esc, icon, toast, pop, closePop, segButtons, placeKnobs });
+function setPage(page) {
+  closePop();
+  S.page = page;
+  document.body.dataset.page = page;
+  const pages = [["themes", "Themes"], ["home", "Home"], ["library", "Library"], ["explore", "Explore"]];
+  $("#pages").innerHTML = pages.map(([v, l], i) => (i > 1 && pages[i - 1][0] !== page && v !== page ? '<span class="div"></span>' : "") + `<button class="${v === page ? "on" : ""}" data-page="${v}">${l}</button>`).join("");
+  if (page !== "themes") Walls.render(page);
 }
 
 /* ─── Input ─── */
 document.addEventListener("click", (e) => {
   const t = e.target;
-  if (popEl && !popEl.contains(t) && !t.closest("[data-act=try],[data-act=use],[data-act=settings],[data-act=saver-settings],[data-mark]")) closePop();
-  const look = t.closest("[data-look-choice]");
-  if (look) { S.look = look.dataset.lookChoice; return renderLook(); }
+  if (popEl && !popEl.contains(t) && !t.closest("[data-act=try],[data-act=use],[data-act=settings],[data-act=saver-settings],[data-act=walls-settings],[data-w-filter],[data-mark]")) closePop();
+  const page = t.closest("[data-page]");
+  if (page && page.closest("#pages")) return setPage(page.dataset.page);
+  if (S.page !== "themes" && Walls.click(t)) return;
+  const pick = t.closest("[data-gate-pick]");
+  if (pick) { S.gate = pick.dataset.gatePick; return renderWall(); }
   const open = t.closest("[data-open]");
+  if (open && open.hasAttribute("data-from-gate")) return openTheme(open.dataset.open, $(".gate.on .pic"));
   if (open && !t.closest("[data-act]")) return openTheme(open.dataset.open, open.querySelector(".thumb") || open);
   const chip = t.closest("[data-chip]");
   if (chip) { S.filter = chip.dataset.chip; return renderWall(); }
@@ -431,6 +462,7 @@ document.addEventListener("click", (e) => {
     if (seg.id === "modes") { S.mode = v; renderStage(); return loadLive(); }
     if (seg.id === "tabs") { S.tab = v; return renderInspector(); }
     if (seg.dataset.seg === "settab") { S.settab = v; return fillSettings(popEl); }
+    if (seg.dataset.seg === "look") { S.look = v; document.body.dataset.look = v; return fillSettings(popEl); }
     if (seg.dataset.seg === "quality") { S.saver.quality = v; return renderAll(); }
     if (seg.dataset.segField) return set(seg.dataset.segField, v);
   }
@@ -467,7 +499,6 @@ document.addEventListener("click", (e) => {
   if (!a) return;
   const act = {
     back: closeTheme,
-    step: () => { S.stepOpen = !S.stepOpen; renderWall(); if (S.stepOpen) setTimeout(() => $("#stepaway").scrollIntoView({ behavior: "smooth", block: "start" }), 360); },
     inspector: () => { S.inspector = !S.inspector; document.body.classList.toggle("inspector", S.inspector); layout(); },
     save: () => { S.draft = {}; toast("Saved to ~/.config/darwan/config.toml (in the app)", "", 1, "done"); renderAll(); },
     discard: () => { S.draft = {}; renderAll(); },
@@ -505,12 +536,15 @@ document.addEventListener("click", (e) => {
   act?.();
 });
 document.addEventListener("change", (e) => {
+  const ss = e.target.closest("[data-saver-select]");
+  if (ss) { S.saver[ss.dataset.saverSelect] = ss.value; return renderAll(); }
   const s = e.target.closest("[data-select]");
   if (s) return set(s.dataset.select, s.value);
   const tx = e.target.closest("[data-text]");
   if (tx) set(tx.dataset.text, tx.value);
 });
 document.addEventListener("input", (e) => {
+  Walls.input(e);
   const r = e.target.closest("[data-range]");
   if (r) { r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min)) * 100 + "%"); r.nextElementSibling.textContent = r.value + (allFields(themeId()).find((f) => f.key === r.dataset.range)?.unit || ""); }
   const c = e.target.closest("[data-colour]");
@@ -532,7 +566,7 @@ function poke(e) {
   document.body.classList.remove("idle");
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => {
-    const over = document.querySelector("#inspector:hover, .dock:hover, #stage .top:hover, .strip:hover, .lookswitch:hover");
+    const over = document.querySelector("#inspector:hover, .dock:hover, #stage .top:hover, .strip:hover");
     if (document.body.classList.contains("settled") && !popEl && !over) document.body.classList.add("idle");
   }, 2500);
   if (e && document.body.classList.contains("settled")) {
@@ -545,7 +579,8 @@ addEventListener("resize", () => { layout(); placeKnobs(); });
 
 addEventListener("keydown", (e) => {
   const typing = e.target.closest("input, select, textarea");
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") { e.preventDefault(); if (document.body.classList.contains("staged")) closeTheme(); return $("#search").focus(); }
+  if (S.page !== "themes") { if (Walls.key(e) || typing) return; }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f" && S.page === "themes") { e.preventDefault(); if (document.body.classList.contains("staged")) closeTheme(); return $("#search").focus(); }
   if (e.key === "Escape") { if (popEl) return closePop(); if (typing) return e.target.blur(); if (document.body.classList.contains("staged")) return closeTheme(); }
   if (typing) return;
   if (document.body.classList.contains("staged")) {
@@ -575,9 +610,9 @@ addEventListener("keydown", (e) => {
 });
 addEventListener("keyup", (e) => { if (e.key === "\\") compare(false); });
 
-// A theme picked at random behind the glass, as the app does at each launch.
-$("#wallpaper img").src = cards[Math.floor(Math.random() * cards.length)].still;
 document.body.classList.add("inspector");
-renderLook();
+document.body.dataset.look = S.look;
+setPage("themes");
 renderAll();
+depth();
 layout();

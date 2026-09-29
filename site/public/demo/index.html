@@ -10,25 +10,44 @@
 <script type="module" src="demo.js"></script>
 </head>
 <body data-look="darwan">
-  <div id="wallpaper"><img alt=""></div>
+  <div id="wallpaper"><img class="a" alt=""><img class="b" alt=""><div class="blurred"><img alt=""></div><div class="shade"></div><div class="scrim"></div><div class="dark"></div></div>
 
-  <main id="wall">
-    <header class="toolbar">
-      <a class="brand" href="/" target="_top" title="darwan.dev home"><img src="/darwan.svg" alt="">Darwan</a>
+  <header class="toolbar" id="toolbar">
+    <a class="brand" href="/" target="_top" title="darwan.dev home"><img src="/darwan.svg" alt="">Darwan</a>
+    <nav class="pages" id="pages"></nav>
+    <div class="tools themes-only">
       <label class="search"><svg class="i"><use href="#i-search"/></svg><input id="search" placeholder="Search themes" autocomplete="off"><kbd>Ctrl F</kbd></label>
       <button class="flat health" data-act="doctor"><span class="dot"></span>All good</button>
       <button class="flat icon" data-act="settings" id="gear" title="Settings for every theme"><svg class="i"><use href="#i-gear"/></svg></button>
-    </header>
+    </div>
+    <div class="tools walls-only">
+      <button class="round-glass" data-act="walls-add" title="Add pictures or videos to your Library"><svg class="i"><use href="#i-plus"/></svg></button>
+      <button class="round-glass" data-act="walls-settings" title="Wallpaper folder and colours"><svg class="i"><use href="#i-gear"/></svg></button>
+    </div>
+  </header>
+
+  <main id="wall">
     <div class="scroll" id="wallScroll">
       <div class="body">
-        <div class="eyebrow">Your gates</div>
-        <div class="gates" id="gates"></div>
-        <section class="stepaway glass" id="stepaway"></section>
+        <section class="hero" id="hero"></section>
         <div class="chips" id="chips"></div>
         <div id="sections"></div>
       </div>
     </div>
   </main>
+
+  <main id="walls">
+    <div class="walls-bg" id="wallsBg"><img class="a" alt=""><img class="b" alt=""><div class="shade"></div><div class="veil"></div></div>
+    <div class="walls-view scroll" id="wallsView"></div>
+  </main>
+  <section id="wdetail">
+    <img class="stand" alt=""><img class="full" alt="">
+    <button class="wback" data-act="wd-close" title="Back (Esc)"><svg class="i"><use href="#i-left"/></svg></button>
+    <button class="wstep prev" data-act="wd-prev" title="Previous (←)"><svg class="i"><use href="#i-left"/></svg></button>
+    <button class="wstep next" data-act="wd-next" title="Next (→)"><svg class="i"><use href="#i-right"/></svg></button>
+    <div class="wloading"><span class="spinner"></span>Loading full size…</div>
+    <div class="wbar glass" id="wbar"></div>
+  </section>
 
   <div id="backdrop"><img alt=""></div>
   <section id="stage">
@@ -69,7 +88,6 @@
     <div class="savebar" id="savebar"><span>Unsaved changes</span><button class="btn" data-act="discard">Discard</button><button class="btn primary" data-act="save">Save</button></div>
   </aside>
 
-  <div class="lookswitch glass" id="look"></div>
   <div class="wallsave glass" id="wallsave"><span>Unsaved changes</span><button class="pill" data-act="discard">Discard</button><button class="pill primary" data-act="save">Save</button></div>
 
   <svg width="0" height="0" style="position:absolute">
@@ -93,6 +111,9 @@
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
     <symbol id="i-display" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM8 20h8M12 16v4"/></symbol>
     <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8M6.3 7.3a8 8 0 1 0 11.4 0"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></symbol>
   </svg>
 </body>
 </html>
