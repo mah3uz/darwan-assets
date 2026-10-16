@@ -56,11 +56,9 @@ fn picture(f: &Found, topic: &str) -> Value {
     })
 }
 
-// APODs that are notices rather than pictures to set.
-const NOT_PICTURES: &[&str] = &["2026-09-28"];
-
-// Free pictures only: Commons' featured ones under their licences, and NASA's own APODs. Bing's and Wallhaven's
-// belong to their owners, and an APOD with a photographer's copyright is theirs; the public demo leaves those out.
+// Free Commons pictures under their licences, and dharmx/walls' by the user's choice, credited to the repository and
+// shown from GitHub. Bing's and Wallhaven's belong to their owners; the public demo leaves those out. dharmx/walls has
+// no thumbnails, so only small files are taken.
 fn pictures(client: &Client, source: Source, topic: Option<&str>, most: usize) -> Vec<Value> {
     let q = Query {
         topic: topic.map(str::to_string),
@@ -72,7 +70,7 @@ fn pictures(client: &Client, source: Source, topic: Option<&str>, most: usize) -
         .unwrap_or_else(|e| panic!("{}: {e}", source.name()));
     page.items
         .iter()
-        .filter(|f| !f.licence.contains('©') && f.width >= f.height && !NOT_PICTURES.contains(&f.id.as_str()))
+        .filter(|f| !f.licence.contains('©') && f.width >= f.height && (f.source != Source::Walls || f.bytes <= 1_500_000))
         .take(most)
         .map(|f| picture(f, topic.unwrap_or("space")))
         .collect()
@@ -82,10 +80,10 @@ fn walls() -> Value {
     let cache = Path::new(env!("CARGO_MANIFEST_DIR")).join("target/online-cache");
     let client = Client::new(cache);
     // A handful is enough to show the pages; every one is fetched from its source by the visitor's browser.
-    let apod = pictures(&client, Source::Apod, None, 6);
     let mut nature = pictures(&client, Source::Commons, Some("nature"), 8);
     let mut space = pictures(&client, Source::Commons, Some("space"), 6);
     let mut city = pictures(&client, Source::Commons, Some("city"), 6);
+    let walls = pictures(&client, Source::Walls, None, 6);
     // "Your" Library: two of each, as if downloaded into ~/Pictures/Wallpapers; online they show as downloaded.
     let mut library = Vec::new();
     for (folder, list) in [("Nature", &mut nature), ("Space", &mut space), ("City", &mut city)] {
@@ -98,20 +96,20 @@ fn walls() -> Value {
     }
     // Explore mixes every source, one of each in turn, as the app's first page does.
     let mut explore = Vec::new();
-    let lists = [&apod, &nature, &space, &city];
+    let lists = [&walls, &nature, &space, &city];
     for i in 0..lists.iter().map(|l| l.len()).max().unwrap_or(0) {
         explore.extend(lists.iter().filter_map(|l| l.get(i).cloned()));
     }
     json!({
         "library": library,
-        "apod": apod,
+        "walls": walls,
         "nature": nature,
         "space": space,
         "city": city,
         "explore": explore,
         "groups": darwan_core::wallpaper::filter::GROUPS.iter().map(|g| g.label).collect::<Vec<_>>(),
         "sources": [
-            { "value": "apod", "label": Source::Apod.name() },
+            { "value": "walls", "label": Source::Walls.name() },
             { "value": "commons", "label": Source::Commons.name() },
         ],
     })

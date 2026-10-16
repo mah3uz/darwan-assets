@@ -1,13 +1,14 @@
 // The Wallpapers pages, as the GUI lays them out: Home, Library and Explore over one of your wallpapers, and a
-// wallpaper full-window with Set. The pictures are free ones (Wikimedia Commons, NASA), shown from their sources.
+// wallpaper full-window with Set. The pictures are free ones (Wikimedia Commons, dharmx/walls), shown from their sources.
 export function walls({ D, $, esc, icon, toast, pop, closePop, segButtons, placeKnobs }) {
   const W = D.walls;
-  const lists = { library: W.library, apod: W.apod, nature: W.nature, space: W.space, city: W.city, explore: W.explore };
+  const lists = { library: W.library, walls: W.walls, nature: W.nature, space: W.space, city: W.city, explore: W.explore };
   const S = { view: "home", category: null, featured: W.library[0], source: "", ratio: "", sort: "popular", libQuery: "", detail: null, lockOffered: false };
   const shuffled = (l) => l.map((x) => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
   let current = [];
 
   const credit = (it) => [it.sourceLabel, it.author].filter(Boolean).join(" · ");
+  const creditHtml = (it) => it.source === "walls" ? `<a href="https://github.com/dharmx/walls" target="_blank" rel="noopener">${esc(credit(it))}</a>` : esc(credit(it));
   function card(it, list, i, cls = "") {
     const badge = list === "library" ? (i === 0 ? "IN USE" : i < 3 ? "NEW" : "") : it.downloaded ? "✓ DOWNLOADED" : "";
     return `<div class="wcard ${cls}" data-w="${list}" data-i="${i}"><div class="wthumb">
@@ -19,7 +20,7 @@ export function walls({ D, $, esc, icon, toast, pop, closePop, segButtons, place
   const row = (title, sub, list, all) => `<div class="wrow"><div class="wrow-head"><div><div class="t">${esc(title)}${all ? `<button data-w-all="${list}" title="See all">${icon("right")}</button>` : ""}</div><div class="s">${esc(sub)}</div></div>
     <div class="arrows"><button data-w-scroll="-1">${icon("left")}</button><button data-w-scroll="1">${icon("right")}</button></div></div>
     <div class="wrow-list">${lists[list].map((it, i) => card(it, list, i)).join("")}</div></div>`;
-  const titles = { apod: ["SOURCE", "NASA APOD"], nature: ["CATEGORY", "Nature"], space: ["CATEGORY", "Space"], city: ["CATEGORY", "City"] };
+  const titles = { walls: ["SOURCE", "dharmx/walls"], nature: ["CATEGORY", "Nature"], space: ["CATEGORY", "Space"], city: ["CATEGORY", "City"] };
 
   function home() {
     const f = S.featured;
@@ -28,7 +29,7 @@ export function walls({ D, $, esc, icon, toast, pop, closePop, segButtons, place
         <div class="facts"><span>Your Library</span>${f.size ? `<span>${f.size}</span>` : ""}</div>
         <button class="glassbtn" data-w-featured>View Wallpaper${icon("external")}</button></div>
       <div class="wstrip">${W.library.map((it, i) => card(it, "library", i, it === f ? "on" : "")).join("")}</div>
-      ${row("Astronomy Picture of the Day", "From NASA, day by day", "apod", true)}
+      ${row("From dharmx/walls", "A hand-picked collection", "walls", true)}
       ${row("Featured on Wikimedia Commons", "Freely licensed nature photography", "nature", true)}
       ${row("Recently added", "The newest in your Library", "library", false)}
       <div class="wnote">In the app, Today on Bing and Popular on Wallhaven are here too, and every row fills as you scroll.</div>
@@ -50,7 +51,7 @@ export function walls({ D, $, esc, icon, toast, pop, closePop, segButtons, place
     if (S.sort === "random") shown = shuffled(shown);
     const chip = (on, label, attr) => `<button class="wchip ${on ? "on" : ""}" ${attr}>${esc(label)}</button>`;
     return `<div class="wpad"><div class="wcenter"><h2>Explore</h2>
-      <div class="sub">Free wallpapers from Wallhaven, Bing, NASA and Wikimedia Commons. Never anything sexual.</div>
+      <div class="sub">Free from Wallhaven, Bing, Wikimedia Commons and dharmx/walls.</div>
       <div class="wtools"><label class="wsearch">${icon("search")}<input data-w-search placeholder="Search Wallhaven"></label><button class="wbtn" data-w-filter>${icon("filter")}Filter</button></div></div>
       <div class="wchips" style="margin-top:46px">${chip(S.source === "", "All sources", 'data-w-source=""')}${W.sources.map((s) => chip(S.source === s.value, s.label, `data-w-source="${s.value}"`)).join("")}</div>
       <div class="wchips">${[["21x9", "Ultrawide (21:9)"], ["16x9", "Landscape (16:9)"], ["16x10", "16:10"]].map(([v, l]) => chip(S.ratio === v, l, `data-w-ratio="${v}"`)).join("")}</div>
@@ -97,7 +98,7 @@ export function walls({ D, $, esc, icon, toast, pop, closePop, segButtons, place
     full.onload = () => { if (full.getAttribute("src") === it.preview) d.classList.add("ready"); };
     full.src = it.preview;
     const licence = it.licenceUrl ? `<a href="${esc(it.licenceUrl)}" target="_blank" rel="noopener">${esc(it.licence)}</a>` : esc(it.licence);
-    $("#wbar").innerHTML = `<div class="t"><b>${esc(it.title)}</b><span>${[it.size, esc(credit(it)), licence].filter(Boolean).join("  ·  ")}</span></div>
+    $("#wbar").innerHTML = `<div class="t"><b>${esc(it.title)}</b><span>${[it.size, creditHtml(it), licence].filter(Boolean).join("  ·  ")}</span></div>
       ${S.lockOffered ? `<button class="pill" data-w-lock>Use on lockscreen too</button>` : ""}
       <button class="pill primary" data-w-set>Set Wallpaper</button>`;
     d.querySelectorAll(".wstep").forEach((b) => (b.hidden = lists[list].length < 2));
@@ -144,7 +145,7 @@ export function walls({ D, $, esc, icon, toast, pop, closePop, segButtons, place
     if (tt) { closePop(); toast(tt.dataset.wToast, "", 1, "done", 3000); return true; }
     if (t.closest("[data-w-set]")) {
       const it = lists[S.detail.list][S.detail.i];
-      toast(it.source === "commons" || it.source === "apod" ? "In the app: downloaded into your folder and set with hyprpaper" : "In the app: set with hyprpaper", it.thumb, 1, "done", 3500);
+      toast(it.source === "commons" || it.source === "walls" ? "In the app: downloaded into your folder and set with hyprpaper" : "In the app: set with hyprpaper", it.thumb, 1, "done", 3500);
       S.lockOffered = true;
       show();
       return true;

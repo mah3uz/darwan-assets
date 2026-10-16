@@ -23,7 +23,7 @@ your wallpapers at full size.
 
 | Page | What's there |
 |:--|:--|
-| **Home** | one of your wallpapers featured, with *View Wallpaper* and a strip of others to feature instead; then rows from Bing, Wallhaven, NASA's Astronomy Picture of the Day, Wikimedia Commons, and what you added last |
+| **Home** | one of your wallpapers featured, with *View Wallpaper* and a strip of others to feature instead; then rows from Bing, Wallhaven, dharmx/walls, Wikimedia Commons, and what you added last |
 | **Library** | your wallpaper folder and its subfolders, four levels down, newest first, with NEW and IN USE badges, colour chips and a search; **+** adds pictures or videos |
 | **Explore** | every source mixed, or one picked with the source chips; search Wallhaven, pick a shape (ultrawide, 16:9, 16:10) and Popular, Latest or Random, or open a topic such as Nature, Space or City |
 
@@ -59,14 +59,14 @@ No account or API key is needed.
 |:--|:--|
 | Wallhaven | searchable; popular, latest or random |
 | Bing | Microsoft's image of the day |
-| NASA APOD | the Astronomy Picture of the Day |
+| [dharmx/walls](https://github.com/dharmx/walls) | a hand-picked collection by dharmx on GitHub; search by folder and file name |
 | Wikimedia Commons | featured pictures: nature, space, city, night |
 
 Pictures and responses are cached under `~/.cache/darwan` (`$XDG_CACHE_HOME`), so a second visit is quick.
 
 ## Filter
 
-**Sexual content in any form is never shown**, from any source, and there is no switch for it.
+**Sexual content is never shown** from Wallhaven, Bing or Wikimedia Commons, and there is no switch for it. dharmx/walls' pictures are not word-checked.
 
 People and portraits, anime and manga, games, films and TV, war and weapons, gore and violence, and horror stay hidden
 too until you allow them under *Filter* on the Explore page, or with `wallpaper.allow`:
@@ -75,7 +75,7 @@ too until you allow them under *Filter* on the Explore page, or with `wallpaper.
 darwan set wallpaper.allow anime,games
 ```
 
-Wallhaven pictures appear one by one, as each one's own tags pass these checks.
+Wallhaven applies the filter in its own search, and anime and manga are always left out of it, whatever the switch says. dharmx/walls is filtered by folder: its anime folders need *Anime and manga* and its `girl` folder needs *People*.
 
 ## Colours from the wallpaper
 
@@ -109,7 +109,7 @@ terminal, add `--allow-restart`.
 | `darwan wallpaper status` | what draws the wallpaper, what it can do and what each screen shows |
 | `darwan wallpaper list` | the wallpapers in your folder, newest first |
 | `darwan wallpaper prepare` | make every thumbnail and colour ahead of time |
-| `darwan wallpaper online [source] [words]` | browse `wallhaven` (the default), `bing`, `apod` or `commons`; `--sort`, `--topic` for Commons |
+| `darwan wallpaper online [source] [words]` | browse `wallhaven` (the default), `bing`, `commons` or `walls`; `--sort`, `--topic` for Commons |
 
 `darwan wallpaper online` numbers what it finds. `--download 3` saves the third into your folder with its credit, and
 `--set` also sets it:
